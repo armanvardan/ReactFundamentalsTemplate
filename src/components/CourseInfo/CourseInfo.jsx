@@ -22,11 +22,12 @@
 // * remove props 'coursesList', 'authorsList'
 // * use selectors from store/selectors.js to get coursesList, authorsList from store
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { formatCreationDate, getCourseDuration } from "../../helpers";
 
 import styles from "./styles.module.css";
+import { Button } from "../../common";
 
 // props description
 // * 'coursesList' - list of all courses. You need it to get chosen course from the list
@@ -40,32 +41,56 @@ export const CourseInfo = ({
 }) => {
   // write your code here
 
+  const [selectedCourse, setSelectedCours] = React.useState();
+  const [courseAuthors, setAuthors] = React.useState();
+
+  useEffect(() => {
+    const course = coursesList.find((course) => course.id === showCourseId);
+    setSelectedCours(course);
+
+    const authors = course.authors.map((courseAuthor) => {
+      return authorsList.find((author) => {
+        return author.id === courseAuthor;
+      });
+    });
+    let showingAuthor;
+    if (authors.length > 1) {
+      showingAuthor = authors[0].name + "...";
+    } else {
+      showingAuthor = authors[0].name;
+    }
+    setAuthors(showingAuthor);
+  }, [coursesList, showCourseId, authorsList]);
+
   return (
     <div className={styles.container} data-testid="courseInfo">
-      <h1>Course title</h1>
+      <h1>{selectedCourse && selectedCourse.title}</h1>
       <div className={styles.courseInfo}>
-        <p className={styles.description}>Course description</p>
+        <p className={styles.description}>
+          {selectedCourse && selectedCourse.description}
+        </p>
         <div>
           <p>
             <b>ID: </b>
-            id
+            {selectedCourse && selectedCourse.id}
           </p>
           <p>
             <b>Duration: </b>
-            duration (use getCourseDuration)
+            {selectedCourse && getCourseDuration(selectedCourse.duration)}
           </p>
           <p>
             <b>Created: </b>
-            creation date (use formatCreationDate)
+            {selectedCourse && formatCreationDate(selectedCourse.creationDate)}
           </p>
           <div>
             <b>Authors</b>
             <ul className={styles.authorsList}>
-              //use '.map' to render authors list with 'li' tag
+              <li>{courseAuthors}</li>
             </ul>
           </div>
         </div>
       </div>
+      <Button buttonText={"BACK"} handleClick={onBack} />
       // Module 1: reuse Button component for 'onBack' functionality // Module
       2: use 'react-router-dom' 'Link' component for button 'Back' and remove
       'onBack' prop

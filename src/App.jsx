@@ -1,6 +1,8 @@
 import React from "react";
 
 import styles from "./App.module.css";
+import { Header, Courses } from "./components";
+import { mockedCoursesList, mockedAuthorsList } from "./constants.js";
 
 // Module 1:
 // * use mockedAuthorsList and mockedCoursesList mocked data
@@ -29,8 +31,13 @@ function App() {
 
   return (
     <div className={styles.wrapper}>
-      {/* place Header component */}
-      <div className={styles.container}>{/* place other components */}</div>
+      <Header />
+      <div className={styles.container}>
+        <Courses
+          coursesList={mockedCoursesList}
+          authorsList={mockedAuthorsList}
+        />
+      </div>
     </div>
   );
 }

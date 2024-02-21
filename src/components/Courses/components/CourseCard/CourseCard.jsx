@@ -38,6 +38,7 @@ import deleteIcon from "../../../../assets/deleteButtonIcon.svg";
 import editIcon from "../../../../assets/editButtonIcon.svg";
 
 import styles from "./styles.module.css";
+import { Button } from "../../../../common";
 
 export const CourseCard = ({ course, handleShowCourse, authorsList }) => {
   // write your code here
@@ -45,23 +46,29 @@ export const CourseCard = ({ course, handleShowCourse, authorsList }) => {
   return (
     <div className={styles.cardContainer} data-testid="courseCard">
       <div className={styles.cardText}>
-        <h2>Title</h2>
-        <p>Description</p>
+        <h2>{course.title}</h2>
+        <p>{course.description}</p>
       </div>
       <div className={styles.cardDetails}>
         <p>
           <b>Authors: </b>
-          authors list
+          {course.authors.map((author) => {
+            return author.length > 1 ? course.authors[0] + "..." : author;
+          })}
         </p>
         <p>
           <b>Duration:</b>
-          <span>duration</span>
+          <span>{getCourseDuration(course.duration)}</span>
         </p>
         <p>
           <b>Created: </b>
-          <span>date</span>
+          <span>{formatCreationDate(course.creationDate)}</span>
         </p>
         <div className={styles.buttonsContainer}>
+          <Button
+            buttonText={"Show course"}
+            handleClick={() => handleShowCourse(course.id)}
+          />
           {/* 
 				reuse Button component for 'Show course' button 
 				reuse Button	component with deleteButtonIcon from 'src/assets' for 'Delete' button

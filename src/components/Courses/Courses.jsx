@@ -1,6 +1,11 @@
 import React from "react";
 
 import styles from "./styles.module.css";
+import { CourseCard } from "./components";
+import { Button } from "../../common";
+import { CourseInfo } from "../CourseInfo";
+import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
@@ -37,12 +42,52 @@ export const Courses = ({ coursesList, authorsList, handleShowCourse }) => {
   // for EmptyCourseList component container use data-testid="emptyContainer" attribute
   // for button in EmptyCourseList component add data-testid="addCourse" attribute
 
+  const [selectedCoursId, setSelectedCoursId] = React.useState(null);
+
+  function handleSelectedCourse(course) {
+    setSelectedCoursId(course);
+  }
+
+  function handleBackClick() {
+    setSelectedCoursId(null);
+  }
+
+  const courseType = selectedCoursId ? (
+    <CourseInfo
+      showCourseId={selectedCoursId}
+      coursesList={coursesList}
+      authorsList={authorsList}
+      onBack={handleBackClick}
+    />
+  ) : coursesList.length > 0 ? (
+    coursesList.map((courseItem) => {
+      return (
+        <CourseCard
+          course={courseItem}
+          key={courseItem.id}
+          handleShowCourse={(course) => handleSelectedCourse(course)}
+        />
+      );
+    })
+  ) : (
+    <EmptyCourseList
+      title={"Your List Is Empty"}
+      description={
+        "Please use 'Add New Course' button to add your first course"
+      }
+      buttonText={"ADD NEW COURSE"}
+    />
+  );
+
   return (
     <>
-      <div className={styles.panel}>
-        // reuse Button component for 'ADD NEW COURSE' button
-      </div>
-      // use '.map' array method to render all courses. Use CourseCard component
+      {coursesList.length > 0 && (
+        <div className={styles.panel}>
+          <Button buttonText={"ADD NEW COURSE"} />
+        </div>
+      )}
+      <SearchBar />
+      {courseType}
     </>
   );
 };
