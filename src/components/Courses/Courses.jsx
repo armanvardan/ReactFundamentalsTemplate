@@ -5,7 +5,6 @@ import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { CourseInfo } from "../CourseInfo";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
-import { SearchBar } from "./components/SearchBar/SearchBar";
 
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
