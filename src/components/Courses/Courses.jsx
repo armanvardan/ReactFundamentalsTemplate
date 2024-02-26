@@ -52,32 +52,26 @@ export const Courses = ({ coursesList, authorsList, handleShowCourse }) => {
     setSelectedCoursId(null);
   }
 
-  const courseType = selectedCoursId ? (
-    <CourseInfo
-      showCourseId={selectedCoursId}
-      coursesList={coursesList}
-      authorsList={authorsList}
-      onBack={handleBackClick}
-    />
-  ) : coursesList.length > 0 ? (
-    coursesList.map((courseItem) => {
-      return (
-        <CourseCard
-          course={courseItem}
-          key={courseItem.id}
-          handleShowCourse={(course) => handleSelectedCourse(course)}
-        />
-      );
-    })
-  ) : (
-    <EmptyCourseList
-      title={"Your List Is Empty"}
-      description={
-        "Please use 'Add New Course' button to add your first course"
-      }
-      buttonText={"ADD NEW COURSE"}
-    />
-  );
+  const courseType =
+    coursesList.length > 0 ? (
+      coursesList.map((courseItem) => {
+        return (
+          <CourseCard
+            course={courseItem}
+            key={courseItem.id}
+            handleShowCourse={(course) => handleSelectedCourse(course)}
+          />
+        );
+      })
+    ) : (
+      <EmptyCourseList
+        title={"Your List Is Empty"}
+        description={
+          "Please use 'Add New Course' button to add your first course"
+        }
+        buttonText={"ADD NEW COURSE"}
+      />
+    );
 
   return (
     <>
@@ -86,8 +80,15 @@ export const Courses = ({ coursesList, authorsList, handleShowCourse }) => {
           <Button buttonText={"ADD NEW COURSE"} />
         </div>
       )}
-      <SearchBar />
-      {courseType}
+      {selectedCoursId && (
+        <CourseInfo
+          showCourseId={selectedCoursId}
+          coursesList={coursesList}
+          authorsList={authorsList}
+          onBack={handleBackClick}
+        />
+      )}
+      {!selectedCoursId && courseType}
     </>
   );
 };
