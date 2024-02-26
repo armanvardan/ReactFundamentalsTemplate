@@ -91,9 +91,9 @@ export const CourseInfo = ({
         </div>
       </div>
       <Button buttonText={"BACK"} handleClick={onBack} />
-      // Module 1: reuse Button component for 'onBack' functionality // Module
+      {/* // Module 1: reuse Button component for 'onBack' functionality // Module
       2: use 'react-router-dom' 'Link' component for button 'Back' and remove
-      'onBack' prop
+      'onBack' prop */}
     </div>
   );
 };
