@@ -36,9 +36,15 @@ import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
+import { useNavigate } from "react-router-dom";
 
-export const CourseCard = ({ course, handleShowCourse, authorsList }) => {
+export const CourseCard = ({ course, authorsList }) => {
   // write your code here
+  const navigate = useNavigate();
+
+  function handleShowCourse(selectedCoursId) {
+    navigate(`../courses/${selectedCoursId}`);
+  }
 
   return (
     <div className={styles.cardContainer} data-testid="courseCard">
@@ -64,7 +70,9 @@ export const CourseCard = ({ course, handleShowCourse, authorsList }) => {
         <div className={styles.buttonsContainer}>
           <Button
             buttonText={"Show course"}
-            handleClick={() => handleShowCourse(course.id)}
+            handleClick={() => {
+              handleShowCourse(course.id);
+            }}
           />
           {/* 
 				reuse Button component for 'Show course' button 

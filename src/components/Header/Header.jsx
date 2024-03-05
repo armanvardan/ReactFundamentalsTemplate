@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./styles.module.css";
 import { Logo } from "./components";
 import { Button } from "../../common";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Module 1:
 // * add Logo and Button components
@@ -35,17 +36,33 @@ import { Button } from "../../common";
 
 export const Header = () => {
   // write your code here
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [user, setUser] = useState(null);
 
-  function btnHandleClick() {
-    console.log("you are clicked in Login");
+  useEffect(() => {
+    const currentUser = localStorage.getItem("user");
+    setUser(currentUser);
+  }, [location]);
+
+  function btnLoginClick() {
+    navigate("../login", { replace: true });
+  }
+
+  function btnLogoutClick() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("../login", { replace: true });
   }
 
   return (
     <div className={styles.headerContainer}>
       <Logo />
       <div className={styles.userContainer}>
-        <p className={styles.userName}>Harry Potter</p>
-        <Button buttonText={"Login"} handleClick={btnHandleClick} />
+        <p className={styles.userName}>{user && user.name}</p>
+        {!user && <Button buttonText={"Login"} handleClick={btnLoginClick} />}
+        {user && <Button buttonText={"Logout"} handleClick={btnLogoutClick} />}
       </div>
     </div>
   );

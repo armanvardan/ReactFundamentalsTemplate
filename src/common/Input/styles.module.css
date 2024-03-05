@@ -6,7 +6,17 @@
   border: 1px solid #cfcfcfad;
 }
 
+.inputInvalid {
+  border: 1px solid #F00;
+}
+
 .label {
   display: flex;
   flex-direction: column;
+}
+
+.invalid {
+  color: #F00;
+  margin-bottom: 20px;
+  margin-top: -20px;
 }

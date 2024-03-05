@@ -1,8 +1,16 @@
 import React from "react";
 
 import styles from "./App.module.css";
-import { Header, Courses } from "./components";
-import { mockedCoursesList, mockedAuthorsList } from "./constants.js";
+import {
+  Header,
+  Courses,
+  Login,
+  Registration,
+  CourseInfo,
+  CourseForm,
+} from "./components";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { mockedAuthorsList, mockedCoursesList } from "./constants";
 
 // Module 1:
 // * use mockedAuthorsList and mockedCoursesList mocked data
@@ -30,15 +38,27 @@ function App() {
   // write your code here
 
   return (
-    <div className={styles.wrapper}>
-      <Header />
-      <div className={styles.container}>
-        <Courses
-          coursesList={mockedCoursesList}
-          authorsList={mockedAuthorsList}
-        />
+    <BrowserRouter>
+      <div className={styles.wrapper}>
+        <Header />
+        <div className={styles.container}>
+          <Routes>
+            <Route path="/" element={<Courses />} />
+            <Route path="login" element={<Login />} />
+            <Route path="registration" element={<Registration />} />
+            <Route
+              path="courses"
+              element={<Courses coursesList={mockedCoursesList} />}
+            />
+            <Route path="courses/:courseId" element={<CourseInfo />} />
+            <Route
+              path="courses/add"
+              element={<CourseForm authorsList={mockedAuthorsList} />}
+            />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 

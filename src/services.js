@@ -1,9 +1,29 @@
 export const createUser = async (data) => {
   // write your code here
+  const url = "http://localhost:4000/register";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const responseData = await response.json();
+  return responseData;
 };
 
 export const login = async (data) => {
   // write your code here
+  const url = "http://localhost:4000/login";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const responseData = await response.json();
+  return responseData;
 };
 
 export const getCourses = async () => {
