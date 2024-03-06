@@ -19,7 +19,7 @@ import { createUser } from "../../services";
 
 export const Registration = () => {
   // write your code here
-  const [hasReqError, setHasReqError] = useState("");
+  const [hasReqError] = useState("");
   const navigate = useNavigate();
   const [allForms, setAllForms] = useState([
     {
