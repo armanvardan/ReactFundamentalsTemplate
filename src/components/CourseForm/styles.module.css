@@ -11,6 +11,10 @@
   border: 1px solid #cfcfcfad;
 }
 
+.descriptionInvalid {
+  border: 1px solid #F00;
+}
+
 form {
   margin-top: 20px;
   padding: 20px;

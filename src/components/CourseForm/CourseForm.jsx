@@ -44,19 +44,137 @@
 //   **  CourseForm 'Add author' button click should add an author to the course authors list.
 //   **  CourseForm 'Delete author' button click should delete an author from the course list.
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import styles from "./styles.module.css";
-import { Input } from "../../common";
+import { Button, Input } from "../../common";
 import { AuthorItem, CreateAuthor } from "./components";
+import { getCourseDuration } from "../../helpers";
+import { useNavigate } from "react-router-dom";
 
 export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
-  //write your code here
+  const navigate = useNavigate();
   const [currentAuthorList, setCureentAuthorList] = useState(authorsList);
+  const [formValues, setFormValues] = useState({
+    title: {
+      name: "title",
+      isValid: true,
+      value: "",
+    },
+    description: {
+      name: "description",
+      isValid: true,
+      value: "",
+    },
+    duration: {
+      duration: "duration",
+      isValid: true,
+      value: 0,
+    },
+    courseAuthors: {
+      name: "courseAuthors",
+      isValid: true,
+      value: [],
+    },
+  });
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
-    console.log("arman = ", author.name);
+    const newList = currentAuthorList.filter((item) => {
+      return author.id !== item.id;
+    });
+    setCureentAuthorList(newList);
+
+    const oldFormsValue = { ...formValues.courseAuthors };
+    oldFormsValue.value.push(author);
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        courseAuthors: oldFormsValue,
+      };
+    });
+  }
+
+  function handleClickDeleteAuthor(event, author) {
+    event.preventDefault();
+    const oldCourseAuthors = { ...formValues.courseAuthors };
+    const newList = oldCourseAuthors.value.filter((item) => {
+      return author.id !== item.id;
+    });
+    oldCourseAuthors.value = newList;
+
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        courseAuthors: oldCourseAuthors,
+      };
+    });
+
+    setCureentAuthorList([...currentAuthorList, author]);
+  }
+
+  function handleCreateAuthor(event, authorName) {
+    event.preventDefault();
+    if (authorName.length > 2) {
+      const newAuthor = {
+        id: Math.round(Math.random() * 1000000).toString(),
+        name: authorName,
+      };
+      setCureentAuthorList((prevState) => [...prevState, newAuthor]);
+    }
+  }
+
+  function changeDuration(event) {
+    const oldDuration = { ...formValues.duration };
+    oldDuration.value = event.target.value;
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        duration: oldDuration,
+      };
+    });
+  }
+
+  function handleCancelBut() {
+    navigate("../courses", { replace: false });
+  }
+
+  function handleCreateCourseBut(event) {
+    event.preventDefault();
+    let hasError = checkErrors();
+    if (!hasError) {
+      navigate("../courses", { replace: false });
+    }
+  }
+
+  function checkErrors() {
+    let hasError = false;
+    let oldForms = { ...formValues };
+    for (let form in oldForms) {
+      const formItem = { ...oldForms[form] };
+      if (formItem.name === "duration") {
+        console.log("duration = ", formItem.value);
+      }
+      if (formItem.name !== "duration") {
+        if (formItem.value.length <= 2) {
+          hasError = true;
+          formItem.isValid = false;
+          oldForms = {
+            ...oldForms,
+            [form]: formItem,
+          };
+        }
+      } else if (formItem.value <= 2) {
+        hasError = true;
+        formItem.isValid = false;
+        oldForms = {
+          ...oldForms,
+          [form]: formItem,
+        };
+      }
+    }
+    setFormValues(oldForms);
+    return hasError;
   }
 
   return (
@@ -67,15 +185,19 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
         <Input
           labelText={"Title"}
           placeholderText={"Input text"}
-          isValid={true}
           data-testid="titleInput"
+          isValid={formValues.title.isValid}
         />
 
         <label>
           Description
           <textarea
-            className={styles.description}
             data-testid="descriptionTextArea"
+            className={
+              formValues.description.isValid
+                ? `${styles.description}`
+                : `${styles.description} ${styles.descriptionInvalid}`
+            }
           />
         </label>
 
@@ -85,16 +207,21 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
               <Input
                 labelText={"Duration"}
                 placeholderText={"Input text"}
-                isValid={true}
+                isValid={formValues.duration.isValid}
                 data-testid="durationInput"
+                onChange={changeDuration}
+                isNumber={true}
               />
-              {/* // reuse Input component with data-testid='durationInput' for duration field
-
-              <p>// render duration. use getCourseDuration helper</p> */}
+              {formValues.duration.value &&
+                getCourseDuration(formValues.duration.value)}
             </div>
 
             <h2>Authors</h2>
-            <CreateAuthor />
+            <CreateAuthor
+              onCreateAuthor={(event, inputValue) => {
+                handleCreateAuthor(event, inputValue);
+              }}
+            />
 
             <div className={styles.authorsContainer}>
               <h3>Authors List</h3>
@@ -102,7 +229,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
                 <AuthorItem
                   key={author.id}
                   author={author}
-                  handleButtonClick={(event) =>
+                  handleAddClick={(event) =>
                     handleClickAddAuthor(event, author)
                   }
                 />
@@ -112,16 +239,29 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 
           <div className={styles.courseAuthorsContainer}>
             <h2>Course authors</h2>
-            {/* // use 'map' to display course autors. Reuse 'AuthorItem' component for each author
-            <p className={styles.notification}>List is empty</p> // display this
-            paragraph if there are no authors in the course */}
+            {formValues.courseAuthors.value.length === 0 ? (
+              <p className={styles.notification}>List is empty</p>
+            ) : (
+              formValues.courseAuthors.value.map((author) => (
+                <AuthorItem
+                  key={author.id}
+                  author={author}
+                  handleDeleteClick={(event) =>
+                    handleClickDeleteAuthor(event, author)
+                  }
+                />
+              ))
+            )}
           </div>
         </div>
       </form>
 
       <div className={styles.buttonsContainer}>
-        {/* // reuse Button component for 'CREATE/UPDATE COURSE' button with
-        // reuse Button component for 'CANCEL' button with */}
+        <Button buttonText={"Cancel"} handleClick={handleCancelBut} />
+        <Button
+          buttonText={"Create Course"}
+          handleClick={handleCreateCourseBut}
+        />
       </div>
     </div>
   );

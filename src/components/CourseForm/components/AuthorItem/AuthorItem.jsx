@@ -1,15 +1,25 @@
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
 
-export const AuthorItem = ({ author, handleButtonClick }) => {
+export const AuthorItem = ({ author, handleAddClick, handleDeleteClick }) => {
   return (
     <div className={styles.authorItem} data-testid="authorItem">
       <span>{author.name}</span>
-      <Button
-        buttonText={"Add author"}
-        data-testid="addAuthor"
-        handleClick={(event) => handleButtonClick(event, author.name)}
-      />
+      {handleAddClick && (
+        <Button
+          buttonText={"Add Author"}
+          data-testid="addAuthor"
+          handleClick={(event) => handleAddClick(event, author.name)}
+        />
+      )}
+      {handleDeleteClick && (
+        <Button
+          buttonText={"Delete Author"}
+          handleClick={(event) => {
+            handleDeleteClick(event, author.name);
+          }}
+        />
+      )}
     </div>
   );
 };

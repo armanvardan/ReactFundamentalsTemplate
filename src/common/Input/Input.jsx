@@ -1,7 +1,7 @@
 // Module 1.
 // ** TASK DESCRIPTION ** - https://d17btkcdsmqrmh.cloudfront.net/new-react-fundamentals/docs/module-1/home-task/components#create-input-component
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import styles from "./styles.module.css";
 
@@ -11,12 +11,8 @@ export const Input = ({
   onChange,
   "data-testid": dataTestId,
   isValid,
+  isNumber,
 }) => {
-  const [isInvalid, setIsInvalid] = useState(isValid);
-  useEffect(() => {
-    setIsInvalid(isValid);
-  }, [isValid]);
-
   return (
     <>
       <label className={styles.label}>
@@ -25,13 +21,14 @@ export const Input = ({
           onChange={onChange}
           placeholder={placeholderText}
           className={
-            isInvalid
+            isValid
               ? `${styles.input}`
               : `${styles.input} ${styles.inputInvalid}`
           }
           data-testid={dataTestId}
+          type={isNumber ? "number" : "string"}
         />
-        {!isInvalid && (
+        {!isValid && (
           <span className={styles.invalid}>{labelText} is required</span>
         )}
       </label>

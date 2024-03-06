@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import styles from "./styles.module.css";
 import { CourseCard } from "./components";
@@ -45,15 +45,6 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
   let { courseId } = useParams();
   const [selectedCoursId, setSelectedCoursId] = React.useState(null);
 
-  // function handleSelectedCourse(myCourseId) {
-  //   setSelectedCoursId("de5aaa59-90f5-4dbc-b8a9-aaf205c551ba");
-  //   console.log("courseId = ", selectedCoursId);
-  //   navigate("../courses", { replace: true, courseId: selectedCoursId });
-  // }
-
-  function handleBackClick() {
-    setSelectedCoursId(null);
-  }
   useEffect(() => {
     setSelectedCoursId(courseId);
   }, [courseId]);
@@ -96,7 +87,6 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
         </div>
       )}
       {!selectedCoursId && courseType}
-      {/* {courseType} */}
     </>
   );
 };
