@@ -9,7 +9,7 @@ export const createUser = async (data) => {
     },
   });
   //const responseData = await response.json();
-  return response;
+  return await response.json();
 };
 
 export const login = async (data) => {
@@ -23,7 +23,7 @@ export const login = async (data) => {
     },
   });
   //const responseData = await response.json();
-  return response;
+  return await response.json();
 };
 
 export const getCourses = async () => {
