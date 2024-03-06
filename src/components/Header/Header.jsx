@@ -39,10 +39,13 @@ export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     const currentUser = localStorage.getItem("user");
     setUser(currentUser);
+    const token = localStorage.getItem("token");
+    setToken(token);
   }, [location]);
 
   function btnLoginClick() {
@@ -61,8 +64,8 @@ export const Header = () => {
       <Logo />
       <div className={styles.userContainer}>
         <p className={styles.userName}>{user && user.name}</p>
-        {!user && <Button buttonText={"Login"} handleClick={btnLoginClick} />}
-        {user && <Button buttonText={"Logout"} handleClick={btnLogoutClick} />}
+        {!token && <Button buttonText={"LOGIN"} handleClick={btnLoginClick} />}
+        {token && <Button buttonText={"LOGOUT"} handleClick={btnLogoutClick} />}
       </div>
     </div>
   );

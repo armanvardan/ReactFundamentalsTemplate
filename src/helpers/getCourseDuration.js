@@ -10,12 +10,12 @@ export const getCourseDuration = (duration) => {
     if (hour < 10) {
       hour = "0" + hour;
     }
-    duration = hour + "hh:" + min + "mm hours";
+    duration = hour + ":" + min + " hours";
   } else {
     if (duration < 10) {
-      duration = "0" + duration + "mm hours";
+      duration = "0" + duration + " hours";
     } else {
-      duration = duration + "mm hours";
+      duration = duration + " hours";
     }
   }
   return duration;

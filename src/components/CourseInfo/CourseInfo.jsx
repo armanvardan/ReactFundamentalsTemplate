@@ -25,7 +25,6 @@
 import React, { useEffect, useState } from "react";
 
 import { formatCreationDate, getCourseDuration } from "../../helpers";
-import { mockedAuthorsList, mockedCoursesList } from "../../constants";
 
 import styles from "./styles.module.css";
 import { Button } from "../../common";
@@ -35,14 +34,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 // * 'coursesList' - list of all courses. You need it to get chosen course from the list
 // * 'authorsList' - list of all authors. You need it to get authors' names for chosen course
 // * 'showCourseId' - id of chosen course. Use it to find needed course on the 'coursesList'.
-export const CourseInfo = () => {
+export const CourseInfo = ({ coursesList, authorsList }) => {
   let { courseId } = useParams();
   const navigate = useNavigate();
 
   const [selectedCourse, setSelectedCours] = useState();
   const [courseAuthors, setAuthors] = useState();
-  const [authorsList] = useState(mockedAuthorsList);
-  const [coursesList] = useState(mockedCoursesList);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

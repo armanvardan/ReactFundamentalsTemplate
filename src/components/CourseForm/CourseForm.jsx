@@ -120,7 +120,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
     setCureentAuthorList([...currentAuthorList, author]);
   }
 
-  function handleCreateAuthor(event, authorName) {
+  function createAuthorButton(event, authorName) {
     event.preventDefault();
     if (authorName.length > 2) {
       const newAuthor = {
@@ -226,7 +226,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
             <h2>Authors</h2>
             <CreateAuthor
               onCreateAuthor={(event, inputValue) => {
-                handleCreateAuthor(event, inputValue);
+                createAuthorButton(event, inputValue);
               }}
             />
 

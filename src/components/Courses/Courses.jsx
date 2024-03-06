@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
@@ -42,12 +42,6 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
   // for button in EmptyCourseList component add data-testid="addCourse" attribute
 
   const navigate = useNavigate();
-  let { courseId } = useParams();
-  const [selectedCoursId, setSelectedCoursId] = React.useState(null);
-
-  useEffect(() => {
-    setSelectedCoursId(courseId);
-  }, [courseId]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -56,28 +50,6 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
       return;
     }
   }, [navigate]);
-
-  const courseType =
-    coursesList.length > 0 ? (
-      coursesList.map((courseItem) => {
-        return (
-          <CourseCard
-            course={courseItem}
-            key={courseItem.id}
-            // handleShowCourse={(courseId) => handleSelectedCourse(courseId)}
-          />
-        );
-      })
-    ) : (
-      <EmptyCourseList
-        title={"Your List Is Empty"}
-        description={
-          "Please use 'Add New Course' button to add your first course"
-        }
-        buttonText={"ADD NEW COURSE"}
-        data-testid="emptyContainer"
-      />
-    );
 
   return (
     <>
@@ -88,7 +60,20 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
           </Link>
         </div>
       )}
-      {!selectedCoursId && courseType}
+      {coursesList.length > 0 ? (
+        coursesList.map((courseItem) => (
+          <CourseCard course={courseItem} key={courseItem.id} />
+        ))
+      ) : (
+        <EmptyCourseList
+          title={"Your List Is Empty"}
+          description={
+            "Please use 'Add New Course' button to add your first course"
+          }
+          buttonText={"ADD NEW COURSE"}
+          data-testid="emptyContainer"
+        />
+      )}
     </>
   );
 };

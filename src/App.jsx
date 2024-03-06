@@ -9,7 +9,7 @@ import {
   CourseInfo,
   CourseForm,
 } from "./components";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { mockedAuthorsList, mockedCoursesList } from "./constants";
 
 // Module 1:
@@ -38,27 +38,33 @@ function App() {
   // write your code here
 
   return (
-    <BrowserRouter>
-      <div className={styles.wrapper}>
-        <Header />
-        <div className={styles.container}>
-          <Routes>
-            <Route path="/" element={<Courses />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registration" element={<Registration />} />
-            <Route
-              path="/courses"
-              element={<Courses coursesList={mockedCoursesList} />}
-            />
-            <Route path="/courses/:courseId" element={<CourseInfo />} />
-            <Route
-              path="/courses/add"
-              element={<CourseForm authorsList={mockedAuthorsList} />}
-            />
-          </Routes>
-        </div>
+    <div className={styles.wrapper}>
+      <Header />
+      <div className={styles.container}>
+        <Routes>
+          <Route path="/" element={<Courses />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route
+            path="/courses"
+            element={<Courses coursesList={mockedCoursesList} />}
+          />
+          <Route
+            path="/courses/:courseId"
+            element={
+              <CourseInfo
+                coursesList={mockedCoursesList}
+                authorsList={mockedAuthorsList}
+              />
+            }
+          />
+          <Route
+            path="/courses/add"
+            element={<CourseForm authorsList={mockedAuthorsList} />}
+          />
+        </Routes>
       </div>
-    </BrowserRouter>
+    </div>
   );
 }
 
