@@ -8,8 +8,8 @@ export const createUser = async (data) => {
       "Content-Type": "application/json",
     },
   });
-  const responseData = await response.json();
-  return responseData;
+  //const responseData = await response.json();
+  return response;
 };
 
 export const login = async (data) => {
@@ -22,8 +22,8 @@ export const login = async (data) => {
       "Content-Type": "application/json",
     },
   });
-  const responseData = await response.json();
-  return responseData;
+  //const responseData = await response.json();
+  return response;
 };
 
 export const getCourses = async () => {

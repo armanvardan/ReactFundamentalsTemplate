@@ -56,10 +56,11 @@ export const Registration = () => {
         password: allForms[2].value,
       };
       const createUserResponse = await createUser(data);
-      if (createUserResponse.successful) {
+      const resp = await createUserResponse.json();
+      if (createUserResponse?.status === 201) {
         navigate("../login", { replace: true });
       } else {
-        setHasReqError(createUserResponse.errors.join("; "));
+        setHasReqError(resp.errors.join("; "));
       }
     }
   }

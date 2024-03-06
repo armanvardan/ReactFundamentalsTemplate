@@ -54,15 +54,13 @@ export const Login = () => {
         password: allForms[1].value,
       };
       const createUserResponse = await login(data);
-      if (createUserResponse.successful) {
-        localStorage.setItem(
-          "token",
-          JSON.stringify(createUserResponse.result)
-        );
-        localStorage.setItem("user", JSON.stringify(createUserResponse.user));
+      const resp = await createUserResponse.json();
+      if (createUserResponse?.status === 201) {
+        localStorage.setItem("token", JSON.stringify(resp.result));
+        localStorage.setItem("user", JSON.stringify(resp.user));
         navigate("../courses", { replace: true });
       } else {
-        setHasReqError(createUserResponse.errors.join("; "));
+        setHasReqError(resp.errors.join("; "));
       }
     }
   }
