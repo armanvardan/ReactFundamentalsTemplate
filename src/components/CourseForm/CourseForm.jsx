@@ -83,7 +83,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
     if (!token) {
       navigate("../login", { replace: false });
     }
-  }, []);
+  }, [navigate]);
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();

@@ -55,7 +55,7 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
       navigate("../login", { replace: false });
       return;
     }
-  }, []);
+  }, [navigate]);
 
   const courseType =
     coursesList.length > 0 ? (

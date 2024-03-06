@@ -41,8 +41,8 @@ export const CourseInfo = () => {
 
   const [selectedCourse, setSelectedCours] = useState();
   const [courseAuthors, setAuthors] = useState();
-  const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
-  const [coursesList, setCoursesList] = useState(mockedCoursesList);
+  const [authorsList] = useState(mockedAuthorsList);
+  const [coursesList] = useState(mockedCoursesList);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -66,7 +66,7 @@ export const CourseInfo = () => {
       showingAuthor = authors[0].name;
     }
     setAuthors(showingAuthor);
-  }, []);
+  }, [authorsList, courseId, coursesList, navigate]);
 
   return (
     <div className={styles.container} data-testid="courseInfo">
