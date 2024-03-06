@@ -53,14 +53,14 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
 
   return (
     <>
-      {coursesList.length > 0 && (
+      {coursesList?.length > 0 && (
         <div className={styles.panel}>
           <Link to={"/courses/add"}>
             <Button buttonText={"ADD NEW COURSE"} />
           </Link>
         </div>
       )}
-      {coursesList.length > 0 ? (
+      {coursesList?.length > 0 ? (
         coursesList.map((courseItem) => (
           <CourseCard course={courseItem} key={courseItem.id} />
         ))
