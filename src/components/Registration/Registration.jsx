@@ -55,12 +55,8 @@ export const Registration = () => {
         email: allForms[1].value,
         password: allForms[2].value,
       };
-      const createUserResponse = await createUser(data);
-      if (createUserResponse.successful) {
-        navigate("../login", { replace: true });
-      } else {
-        setHasReqError(createUserResponse.errors.join("; "));
-      }
+      await createUser(data);
+      navigate("../login", { replace: true });
     }
   }
 
