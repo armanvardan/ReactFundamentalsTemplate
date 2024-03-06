@@ -102,7 +102,7 @@ export const Login = () => {
           {hasReqError}
         </p>
         <p>
-          If you don't have an account you may&nbsp;
+          If you don't have an account you can
           <Link to="/registration">Registration</Link>
         </p>
       </div>

@@ -53,6 +53,7 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("../login", { replace: false });
+      return;
     }
   }, []);
 
@@ -74,6 +75,7 @@ export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
           "Please use 'Add New Course' button to add your first course"
         }
         buttonText={"ADD NEW COURSE"}
+        data-testid="emptyContainer"
       />
     );
 

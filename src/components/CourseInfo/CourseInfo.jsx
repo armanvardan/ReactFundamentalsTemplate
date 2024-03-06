@@ -29,7 +29,7 @@ import { mockedAuthorsList, mockedCoursesList } from "../../constants";
 
 import styles from "./styles.module.css";
 import { Button } from "../../common";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // props description
 // * 'coursesList' - list of all courses. You need it to get chosen course from the list
@@ -37,6 +37,7 @@ import { Link, useParams } from "react-router-dom";
 // * 'showCourseId' - id of chosen course. Use it to find needed course on the 'coursesList'.
 export const CourseInfo = () => {
   let { courseId } = useParams();
+  const navigate = useNavigate();
 
   const [selectedCourse, setSelectedCours] = useState();
   const [courseAuthors, setAuthors] = useState();
@@ -44,6 +45,12 @@ export const CourseInfo = () => {
   const [coursesList, setCoursesList] = useState(mockedCoursesList);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("../login", { replace: false });
+      return;
+    }
+
     const course = coursesList.find((course) => course.id === courseId);
     setSelectedCours(course);
 

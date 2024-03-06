@@ -44,15 +44,15 @@ function App() {
         <div className={styles.container}>
           <Routes>
             <Route path="/" element={<Courses />} />
-            <Route path="login" element={<Login />} />
-            <Route path="registration" element={<Registration />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
             <Route
-              path="courses"
+              path="/courses"
               element={<Courses coursesList={mockedCoursesList} />}
             />
-            <Route path="courses/:courseId" element={<CourseInfo />} />
+            <Route path="/courses/:courseId" element={<CourseInfo />} />
             <Route
-              path="courses/add"
+              path="/courses/add"
               element={<CourseForm authorsList={mockedAuthorsList} />}
             />
           </Routes>

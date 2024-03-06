@@ -44,7 +44,7 @@
 //   **  CourseForm 'Add author' button click should add an author to the course authors list.
 //   **  CourseForm 'Delete author' button click should delete an author from the course list.
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./styles.module.css";
 import { Button, Input } from "../../common";
@@ -77,6 +77,13 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
       value: [],
     },
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("../login", { replace: false });
+    }
+  }, []);
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
@@ -261,6 +268,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
         <Button
           buttonText={"Create Course"}
           handleClick={handleCreateCourseBut}
+          data-testid="createCourseButton"
         />
       </div>
     </div>
