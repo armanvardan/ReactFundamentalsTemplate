@@ -10,7 +10,6 @@ import {
   CourseForm,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { mockedAuthorsList, mockedCoursesList } from "./constants";
 import { getAuthors, getCourses } from "./services";
 import { setCourses } from "./store/slices/coursesSlice";
 import { useDispatch } from "react-redux";
@@ -62,19 +61,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/courses" element={<Courses />} />
-          <Route
-            path="/courses/:courseId"
-            element={
-              <CourseInfo
-                coursesList={mockedCoursesList}
-                authorsList={mockedAuthorsList}
-              />
-            }
-          />
-          <Route
-            path="/courses/add"
-            element={<CourseForm authorsList={mockedAuthorsList} />}
-          />
+          <Route path="/courses/:courseId" element={<CourseInfo />} />
+          <Route path="/courses/add" element={<CourseForm />} />
         </Routes>
       </div>
     </div>

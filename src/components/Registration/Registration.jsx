@@ -55,7 +55,7 @@ export const Registration = () => {
         password: allForms[2].value,
       };
       await createUser(data);
-      navigate("/", { replace: true });
+      navigate("/login", { replace: true });
     }
   }
 

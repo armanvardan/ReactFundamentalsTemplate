@@ -15,7 +15,7 @@
 // * save user's name, token and email to the store after success login.
 // ** TASK DESCRIPTION ** - https://d17btkcdsmqrmh.cloudfront.net/new-react-fundamentals/docs/module-3/home-task/components#login-component
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./styles.module.css";
 import { Input, Button } from "../../common";
@@ -28,6 +28,14 @@ export const Login = () => {
   const [hasReqError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/courses", { replace: false });
+      return;
+    }
+  }, [navigate]);
 
   const [allForms, setAllForms] = useState([
     {
