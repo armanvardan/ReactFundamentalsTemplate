@@ -43,12 +43,6 @@ export const CourseInfo = () => {
   const authorsList = useSelector(getAuthorsSelector);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("../login", { replace: false });
-      return;
-    }
-
     const course = coursesList?.find((course) => course.id === courseId);
     setSelectedCours(course);
 

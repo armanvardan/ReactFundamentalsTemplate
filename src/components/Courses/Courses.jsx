@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import styles from "./styles.module.css";
 import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { getCoursesSelector } from "../../store/selectors";
 
@@ -37,19 +37,8 @@ import { getCoursesSelector } from "../../store/selectors";
 //   ** Courses should display amount of CourseCard equal length of courses array.
 //   ** CourseForm should be shown after a click on the "Add new course" button.
 
-export const Courses = ({ handleShowCourse }) => {
-  const navigate = useNavigate();
-
+export const Courses = () => {
   const coursesList = useSelector(getCoursesSelector, shallowEqual);
-  // const authorsList = useSelector(getAuthorsSelector);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("../login", { replace: false });
-      return;
-    }
-  }, [navigate]);
 
   return (
     <>

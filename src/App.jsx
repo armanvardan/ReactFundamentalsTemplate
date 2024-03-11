@@ -58,7 +58,7 @@ function App() {
       <Header />
       <div className={styles.container}>
         <Routes>
-          <Route path="/" element={<Courses />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/courses" element={<Courses />} />

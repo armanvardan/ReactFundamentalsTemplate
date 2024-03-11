@@ -18,7 +18,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../../services";
 
 export const Registration = () => {
-  // write your code here
   const [hasReqError] = useState("");
   const navigate = useNavigate();
   const [allForms, setAllForms] = useState([
@@ -56,7 +55,7 @@ export const Registration = () => {
         password: allForms[2].value,
       };
       await createUser(data);
-      navigate("../login", { replace: true });
+      navigate("/", { replace: true });
     }
   }
 

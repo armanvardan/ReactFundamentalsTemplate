@@ -46,8 +46,12 @@ export const Header = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/", { replace: false });
+      return;
+    }
     setToken(token);
-  }, [location]);
+  }, [location, navigate]);
 
   function btnLoginClick() {
     navigate("../login", { replace: true });

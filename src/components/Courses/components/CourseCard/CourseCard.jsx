@@ -30,7 +30,7 @@
 //   ** CourseCard should display authors list.
 //   ** CourseCard should display created date in the correct format.
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 
@@ -43,14 +43,6 @@ import { deleteCourse } from "../../../../store/slices/coursesSlice";
 export const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("../login", { replace: false });
-      return;
-    }
-  }, [navigate]);
 
   function handleShowCourse(selectedCoursId) {
     navigate(`../courses/${selectedCoursId}`);

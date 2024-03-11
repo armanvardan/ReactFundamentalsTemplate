@@ -95,13 +95,6 @@ export const CourseForm = () => {
     setCureentAuthorList(newAuthorsList);
   }, [getAuthorList, formValues.courseAuthors.value]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("../login", { replace: false });
-    }
-  }, [navigate]);
-
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
     const newList = currentAuthorList?.filter((item) => {
