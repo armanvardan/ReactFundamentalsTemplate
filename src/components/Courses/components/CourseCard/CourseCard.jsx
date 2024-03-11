@@ -30,7 +30,7 @@
 //   ** CourseCard should display authors list.
 //   ** CourseCard should display created date in the correct format.
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 
@@ -44,12 +44,20 @@ export const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("../login", { replace: false });
+      return;
+    }
+  }, [navigate]);
+
   function handleShowCourse(selectedCoursId) {
     navigate(`../courses/${selectedCoursId}`);
   }
 
-  function handleDeleteCourse(courseId) {
-    dispatch(deleteCourse(courseId));
+  function handleDeleteCourse(course) {
+    dispatch(deleteCourse(course));
   }
 
   return (
@@ -83,18 +91,11 @@ export const CourseCard = ({ course }) => {
           <Button
             buttonText={"Delete"}
             handleClick={() => {
-              handleDeleteCourse(course.id);
+              handleDeleteCourse(course);
             }}
             data-testid="deleteCourse"
           />
           <Button buttonText={"Update"} data-testid="updateCourse" />
-          {/* 
-				reuse Button component for 'Show course' button 
-				reuse Button	component with deleteButtonIcon from 'src/assets' for 'Delete' button
-						with data-testid="deleteCourse" 
-				reuse Link component with editButtonIcon from 'src/assets' for 'Update' button with
-						data-testid="updateCourse" 
-			*/}
         </div>
       </div>
     </div>

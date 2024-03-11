@@ -58,7 +58,7 @@ export const Login = () => {
       };
       const createUserResponse = await login(data);
       localStorage.setItem("token", JSON.stringify(createUserResponse.result));
-      dispatch(
+      await dispatch(
         setUserData({
           name: createUserResponse.user.name,
           email: createUserResponse.user.email,

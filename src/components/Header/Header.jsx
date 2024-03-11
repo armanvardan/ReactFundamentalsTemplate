@@ -63,7 +63,7 @@ export const Header = () => {
     <div className={styles.headerContainer}>
       <Logo />
       <div className={styles.userContainer}>
-        <p className={styles.userName}>{userData && userData.name}</p>
+        <p className={styles.userName}>{userData}</p>
         {!token && <Button buttonText={"LOGIN"} handleClick={btnLoginClick} />}
         {token && <Button buttonText={"LOGOUT"} handleClick={btnLogoutClick} />}
       </div>

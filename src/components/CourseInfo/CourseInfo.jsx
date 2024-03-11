@@ -49,16 +49,16 @@ export const CourseInfo = () => {
       return;
     }
 
-    const course = coursesList.find((course) => course.id === courseId);
+    const course = coursesList?.find((course) => course.id === courseId);
     setSelectedCours(course);
 
     const authors = course.authors.map((courseAuthor) => {
-      return authorsList.find((author) => {
+      return authorsList?.find((author) => {
         return author.id === courseAuthor;
       });
     });
     let showingAuthor;
-    if (authors.length > 1) {
+    if (authors?.length > 1) {
       showingAuthor = authors[0].name + "...";
     } else {
       showingAuthor = authors[0].name;
@@ -68,23 +68,21 @@ export const CourseInfo = () => {
 
   return (
     <div className={styles.container} data-testid="courseInfo">
-      <h1>{selectedCourse && selectedCourse.title}</h1>
+      <h1>{selectedCourse?.title}</h1>
       <div className={styles.courseInfo}>
-        <p className={styles.description}>
-          {selectedCourse && selectedCourse.description}
-        </p>
+        <p className={styles.description}>{selectedCourse?.description}</p>
         <div>
           <p>
             <b>ID: </b>
-            {selectedCourse && selectedCourse.id}
+            {selectedCourse?.id}
           </p>
           <p>
             <b>Duration: </b>
-            {selectedCourse && getCourseDuration(selectedCourse.duration)}
+            {getCourseDuration(selectedCourse?.duration)}
           </p>
           <p>
             <b>Created: </b>
-            {selectedCourse && formatCreationDate(selectedCourse.creationDate)}
+            {formatCreationDate(selectedCourse?.creationDate)}
           </p>
           <div>
             <b>Authors</b>

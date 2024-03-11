@@ -55,7 +55,7 @@ export const Courses = ({ handleShowCourse }) => {
     <>
       {coursesList?.length > 0 && (
         <div className={styles.panel}>
-          <Link to={"/courses/add"}>
+          <Link to="/courses/add">
             <Button buttonText={"ADD NEW COURSE"} />
           </Link>
         </div>

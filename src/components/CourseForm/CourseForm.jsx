@@ -87,7 +87,7 @@ export const CourseForm = () => {
   });
 
   useEffect(() => {
-    const newAuthorsList = getAuthorList.filter((author) => {
+    const newAuthorsList = getAuthorList?.filter((author) => {
       return !formValues.courseAuthors.value.some(
         (courseItem) => courseItem.id === author.id
       );
@@ -104,7 +104,7 @@ export const CourseForm = () => {
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
-    const newList = currentAuthorList.filter((item) => {
+    const newList = currentAuthorList?.filter((item) => {
       return author.id !== item.id;
     });
     setCureentAuthorList(newList);
@@ -122,7 +122,7 @@ export const CourseForm = () => {
   function handleClickDeleteAuthor(event, author) {
     event.preventDefault();
     const oldCourseAuthors = { ...formValues.courseAuthors };
-    const newList = oldCourseAuthors.value.filter((item) => {
+    const newList = oldCourseAuthors.value?.filter((item) => {
       return author.id !== item.id;
     });
     oldCourseAuthors.value = newList;
