@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = {
+  value: [],
+};
 
 export const authorsSlice = createSlice({
   name: "authors",
   initialState,
   reducers: {
-    // setAuthors:
-    // saveAuthor:
+    setAuthors: (state, action) => {
+      state.value = action.payload;
+    },
+    saveAuthor: (state, action) => {
+      state.value.push(action.payload);
+    },
   },
 });
 

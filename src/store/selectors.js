@@ -1,8 +1,8 @@
 // Module 3:
 // * create selectors
 
-export const getCoursesSelector = (state) => null;
-export const getAuthorsSelector = (state) => null;
-export const getUserNameSelector = (state) => null;
+export const getCoursesSelector = (state) => state.courses.value;
+export const getAuthorsSelector = (state) => state.authors.value;
+export const getUserNameSelector = (state) => state.user.value;
 export const getUserRoleSelector = (state) => null;
 export const getUserTokenSelector = (state) => null;

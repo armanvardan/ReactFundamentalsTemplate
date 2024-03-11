@@ -1,14 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = {
+  value: [],
+};
 
 export const coursesSlice = createSlice({
   name: "courses",
   initialState,
   reducers: {
-    // setCourses:
-    // saveCourse:
-    // deleteCourse:
+    setCourses: (state, action) => {
+      state.value = action.payload;
+    },
+    saveCourse: (state, action) => {
+      state.value.push(action.payload);
+    },
+    deleteCourse: (state, action) => {
+      state.value = state.value.filter((item) => item.id !== action.payload);
+    },
     // updateCourse:
   },
 });

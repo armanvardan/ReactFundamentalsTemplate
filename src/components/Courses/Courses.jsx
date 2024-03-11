@@ -5,6 +5,8 @@ import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
 import { Link, useNavigate } from "react-router-dom";
+import { shallowEqual, useSelector } from "react-redux";
+import { getCoursesSelector } from "../../store/selectors";
 
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
@@ -35,13 +37,11 @@ import { Link, useNavigate } from "react-router-dom";
 //   ** Courses should display amount of CourseCard equal length of courses array.
 //   ** CourseForm should be shown after a click on the "Add new course" button.
 
-export const Courses = ({ handleShowCourse, authorsList, coursesList }) => {
-  // write your code here
-
-  // for EmptyCourseList component container use data-testid="emptyContainer" attribute
-  // for button in EmptyCourseList component add data-testid="addCourse" attribute
-
+export const Courses = ({ handleShowCourse }) => {
   const navigate = useNavigate();
+
+  const coursesList = useSelector(getCoursesSelector, shallowEqual);
+  // const authorsList = useSelector(getAuthorsSelector);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

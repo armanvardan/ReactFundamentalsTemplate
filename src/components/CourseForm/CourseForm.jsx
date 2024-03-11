@@ -51,10 +51,18 @@ import { Button, Input } from "../../common";
 import { AuthorItem, CreateAuthor } from "./components";
 import { getCourseDuration } from "../../helpers";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthorsSelector } from "../../store/selectors";
+import { saveAuthor } from "../../store/slices/authorsSlice";
+import { saveCourse } from "../../store/slices/coursesSlice";
 
-export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
+export const CourseForm = () => {
   const navigate = useNavigate();
-  const [currentAuthorList, setCureentAuthorList] = useState(authorsList);
+
+  const getAuthorList = useSelector(getAuthorsSelector);
+  const dispatch = useDispatch();
+
+  const [currentAuthorList, setCureentAuthorList] = useState([]);
   const [formValues, setFormValues] = useState({
     title: {
       name: "title",
@@ -67,7 +75,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
       value: "",
     },
     duration: {
-      duration: "duration",
+      name: "duration",
       isValid: true,
       value: 0,
     },
@@ -77,6 +85,15 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
       value: [],
     },
   });
+
+  useEffect(() => {
+    const newAuthorsList = getAuthorList.filter((author) => {
+      return !formValues.courseAuthors.value.some(
+        (courseItem) => courseItem.id === author.id
+      );
+    });
+    setCureentAuthorList(newAuthorsList);
+  }, [getAuthorList, formValues.courseAuthors.value]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -127,6 +144,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
         id: Math.round(Math.random() * 1000000).toString(),
         name: authorName,
       };
+      dispatch(saveAuthor(newAuthor));
       setCureentAuthorList((prevState) => [...prevState, newAuthor]);
     }
   }
@@ -146,42 +164,63 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
     navigate("../courses", { replace: false });
   }
 
-  function handleCreateCourseBut(event) {
+  async function handleCreateCourseBut(event) {
     event.preventDefault();
-    let hasError = checkErrors();
+    let hasError = await checkErrors();
     if (!hasError) {
+      const authors = currentAuthorList.map((author) => author.name);
+
+      const today = new Date();
+      const day = today.getDate();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const formattedDate = `${month}/${day}/${year}`;
+
+      const newCourse = {
+        authors: authors,
+        creationDate: formattedDate,
+        description: formValues.description.value,
+        duration: formValues.duration.value,
+        id: Math.round(Math.random() * 1000000000000000).toString(),
+        title: formValues.title.value,
+      };
+      dispatch(saveCourse(newCourse));
       navigate("../courses", { replace: false });
     }
   }
 
-  function checkErrors() {
+  async function checkErrors() {
     let hasError = false;
     let oldForms = { ...formValues };
     for (let form in oldForms) {
       const formItem = { ...oldForms[form] };
-      if (formItem.name === "duration") {
-        console.log("duration = ", formItem.value);
-      }
-      if (formItem.name !== "duration") {
+      formItem.isValid = true;
+      if (formItem.name === "title" || formItem.name === "description") {
         if (formItem.value.length <= 2) {
           hasError = true;
           formItem.isValid = false;
-          oldForms = {
-            ...oldForms,
-            [form]: formItem,
-          };
         }
-      } else if (formItem.value <= 2) {
+      }
+
+      if (formItem.name === "duration" && formItem.value <= 2) {
         hasError = true;
         formItem.isValid = false;
-        oldForms = {
-          ...oldForms,
-          [form]: formItem,
-        };
       }
+      oldForms = {
+        ...oldForms,
+        [formItem.name]: formItem,
+      };
     }
-    setFormValues(oldForms);
+    await setFormValues(oldForms);
     return hasError;
+  }
+
+  function handleTitleChange(event) {
+    formValues.title.value = event.target.value;
+  }
+
+  function handleDescriptionChange(event) {
+    formValues.description.value = event.target.value;
   }
 
   return (
@@ -194,6 +233,7 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
           placeholderText={"Input text"}
           data-testid="titleInput"
           isValid={formValues.title.isValid}
+          onChange={handleTitleChange}
         />
 
         <label>
@@ -205,7 +245,13 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
                 ? `${styles.description}`
                 : `${styles.description} ${styles.descriptionInvalid}`
             }
+            onChange={handleDescriptionChange}
           />
+          {!formValues.description.isValid && (
+            <span className={styles.invalid}>
+              {formValues.description.name} is required
+            </span>
+          )}
         </label>
 
         <div className={styles.infoWrapper}>
@@ -232,15 +278,16 @@ export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 
             <div className={styles.authorsContainer}>
               <h3>Authors List</h3>
-              {currentAuthorList.map((author) => (
-                <AuthorItem
-                  key={author.id}
-                  author={author}
-                  handleAddClick={(event) =>
-                    handleClickAddAuthor(event, author)
-                  }
-                />
-              ))}
+              {currentAuthorList &&
+                currentAuthorList?.map((author) => (
+                  <AuthorItem
+                    key={author.id}
+                    author={author}
+                    handleAddClick={(event) =>
+                      handleClickAddAuthor(event, author)
+                    }
+                  />
+                ))}
             </div>
           </div>
 

@@ -1,6 +1,8 @@
 import React from "react";
 
 import styles from "./styles.module.css";
+import { ReactComponent as DeleteIcon } from "../../assets/deleteButtonIcon.svg";
+import { ReactComponent as UpdateIcon } from "../../assets/editButtonIcon.svg";
 
 // Module 1:
 // * use this component in components: Header, Courses
@@ -16,6 +18,12 @@ export const Button = ({
     onClick={handleClick}
     data-testid={dataTestId}
   >
-    {buttonText}
+    {buttonText === "Delete" ? (
+      <DeleteIcon />
+    ) : buttonText === "Update" ? (
+      <UpdateIcon />
+    ) : (
+      buttonText
+    )}
   </button>
 );

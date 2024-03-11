@@ -4,6 +4,9 @@ import styles from "./styles.module.css";
 import { Logo } from "./components";
 import { Button } from "../../common";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserNameSelector } from "../../store/selectors";
+import { removeUserData } from "../../store/slices/userSlice";
 
 // Module 1:
 // * add Logo and Button components
@@ -35,15 +38,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 //   ** Header should have logo and user's name.
 
 export const Header = () => {
-  // write your code here
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
   const [token, setToken] = useState("");
+  const userData = useSelector(getUserNameSelector);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem("user");
-    setUser(currentUser);
     const token = localStorage.getItem("token");
     setToken(token);
   }, [location]);
@@ -54,8 +55,7 @@ export const Header = () => {
 
   function btnLogoutClick() {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
+    dispatch(removeUserData(null));
     navigate("../login", { replace: true });
   }
 
@@ -63,7 +63,7 @@ export const Header = () => {
     <div className={styles.headerContainer}>
       <Logo />
       <div className={styles.userContainer}>
-        <p className={styles.userName}>{user && user.name}</p>
+        <p className={styles.userName}>{userData && userData.name}</p>
         {!token && <Button buttonText={"LOGIN"} handleClick={btnLoginClick} />}
         {token && <Button buttonText={"LOGOUT"} handleClick={btnLogoutClick} />}
       </div>

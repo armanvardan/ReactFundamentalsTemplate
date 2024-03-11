@@ -37,13 +37,19 @@ import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteCourse } from "../../../../store/slices/coursesSlice";
 
-export const CourseCard = ({ course, authorsList }) => {
-  // write your code here
+export const CourseCard = ({ course }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleShowCourse(selectedCoursId) {
     navigate(`../courses/${selectedCoursId}`);
+  }
+
+  function handleDeleteCourse(courseId) {
+    dispatch(deleteCourse(courseId));
   }
 
   return (
@@ -74,6 +80,14 @@ export const CourseCard = ({ course, authorsList }) => {
               handleShowCourse(course.id);
             }}
           />
+          <Button
+            buttonText={"Delete"}
+            handleClick={() => {
+              handleDeleteCourse(course.id);
+            }}
+            data-testid="deleteCourse"
+          />
+          <Button buttonText={"Update"} data-testid="updateCourse" />
           {/* 
 				reuse Button component for 'Show course' button 
 				reuse Button	component with deleteButtonIcon from 'src/assets' for 'Delete' button

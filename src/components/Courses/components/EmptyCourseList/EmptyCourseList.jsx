@@ -7,7 +7,11 @@ export const EmptyCourseList = ({ title, description, buttonText }) => {
       <div className={styles.blockContainer}>{title}</div>
       <div className={styles.blockContainer}>{description}</div>
       <div className={styles.blockContainer}>
-        <Button buttonText={buttonText} className={styles.blockContainer} />
+        <Button
+          buttonText={buttonText}
+          className={styles.blockContainer}
+          data-testid="addCourse"
+        />
       </div>
     </div>
   );

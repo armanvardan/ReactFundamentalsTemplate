@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from "./App.module.css";
 import {
@@ -11,6 +11,10 @@ import {
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import { mockedAuthorsList, mockedCoursesList } from "./constants";
+import { getAuthors, getCourses } from "./services";
+import { setCourses } from "./store/slices/coursesSlice";
+import { useDispatch } from "react-redux";
+import { setAuthors } from "./store/slices/authorsSlice";
 
 // Module 1:
 // * use mockedAuthorsList and mockedCoursesList mocked data
@@ -35,7 +39,19 @@ import { mockedAuthorsList, mockedCoursesList } from "./constants";
 // * wrap 'CourseForm' in the 'PrivateRoute' component
 
 function App() {
-  // write your code here
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchInitData = async () => {
+      const courses = await getCourses();
+      dispatch(setCourses(courses.result));
+
+      const authors = await getAuthors();
+      dispatch(setAuthors(authors.result));
+    };
+
+    fetchInitData();
+  }, [dispatch]);
 
   return (
     <div className={styles.wrapper}>
@@ -45,10 +61,7 @@ function App() {
           <Route path="/" element={<Courses />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
-          <Route
-            path="/courses"
-            element={<Courses coursesList={mockedCoursesList} />}
-          />
+          <Route path="/courses" element={<Courses />} />
           <Route
             path="/courses/:courseId"
             element={

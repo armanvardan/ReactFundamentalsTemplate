@@ -22,7 +22,9 @@ export const CreateAuthor = ({ onCreateAuthor }) => {
       />
       <Button
         buttonText={"Create Author"}
-        handleClick={(event) => onCreateAuthor(event, inputValue)}
+        handleClick={(event) => {
+          onCreateAuthor(event, inputValue);
+        }}
         data-testid="createAuthorButton"
       />
     </div>

@@ -21,11 +21,14 @@ import styles from "./styles.module.css";
 import { Input, Button } from "../../common";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../services";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../store/slices/userSlice";
 
 export const Login = () => {
-  // write your code here
   const [hasReqError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [allForms, setAllForms] = useState([
     {
       name: "Email",
@@ -55,7 +58,12 @@ export const Login = () => {
       };
       const createUserResponse = await login(data);
       localStorage.setItem("token", JSON.stringify(createUserResponse.result));
-      localStorage.setItem("user", JSON.stringify(createUserResponse.user));
+      dispatch(
+        setUserData({
+          name: createUserResponse.user.name,
+          email: createUserResponse.user.email,
+        })
+      );
       navigate("../courses", { replace: true });
     }
   }
