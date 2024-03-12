@@ -53,7 +53,6 @@ import { getCourseDuration } from "../../helpers";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthorsSelector } from "../../store/selectors";
-import { saveAuthor } from "../../store/slices/authorsSlice";
 import { saveCourse } from "../../store/slices/coursesSlice";
 
 export const CourseForm = () => {
@@ -130,17 +129,17 @@ export const CourseForm = () => {
     setCureentAuthorList([...currentAuthorList, author]);
   }
 
-  function createAuthorButton(event, authorName) {
-    event.preventDefault();
-    if (authorName.length > 2) {
-      const newAuthor = {
-        id: Math.round(Math.random() * 1000000).toString(),
-        name: authorName,
-      };
-      dispatch(saveAuthor(newAuthor));
-      setCureentAuthorList((prevState) => [...prevState, newAuthor]);
-    }
-  }
+  // function createAuthorButton(event, authorName) {
+  //   event.preventDefault();
+  //   if (authorName.length > 2) {
+  //     const newAuthor = {
+  //       id: Math.round(Math.random() * 1000000).toString(),
+  //       name: authorName,
+  //     };
+  //     dispatch(saveAuthor(newAuthor));
+  //     setCureentAuthorList((prevState) => [...prevState, newAuthor]);
+  //   }
+  // }
 
   function changeDuration(event) {
     const oldDuration = { ...formValues.duration };
@@ -263,11 +262,7 @@ export const CourseForm = () => {
             </div>
 
             <h2>Authors</h2>
-            <CreateAuthor
-              onCreateAuthor={(event, inputValue) => {
-                createAuthorButton(event, inputValue);
-              }}
-            />
+            <CreateAuthor />
 
             <div className={styles.authorsContainer}>
               <h3>Authors List</h3>

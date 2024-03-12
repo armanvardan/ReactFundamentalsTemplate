@@ -37,7 +37,7 @@ import { getCoursesSelector } from "../../store/selectors";
 //   ** Courses should display amount of CourseCard equal length of courses array.
 //   ** CourseForm should be shown after a click on the "Add new course" button.
 
-export const Courses = ({ handleShowCourse }) => {
+export const Courses = () => {
   const coursesList = useSelector(getCoursesSelector, shallowEqual);
 
   return (
