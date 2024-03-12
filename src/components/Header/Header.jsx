@@ -42,7 +42,7 @@ export const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [token, setToken] = useState("");
-  const userData = useSelector(getUserNameSelector);
+  const userName = useSelector(getUserNameSelector);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -59,6 +59,7 @@ export const Header = () => {
 
   function btnLogoutClick() {
     localStorage.removeItem("token");
+    setToken(null);
     dispatch(removeUserData(null));
     navigate("../login", { replace: true });
   }
@@ -67,7 +68,7 @@ export const Header = () => {
     <div className={styles.headerContainer}>
       <Logo />
       <div className={styles.userContainer}>
-        <p className={styles.userName}>{userData}</p>
+        <p className={styles.userName}>{userName}</p>
         {!token && <Button buttonText={"LOGIN"} handleClick={btnLoginClick} />}
         {token && <Button buttonText={"LOGOUT"} handleClick={btnLogoutClick} />}
       </div>
