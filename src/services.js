@@ -1,5 +1,4 @@
 export const createUser = async (data) => {
-  // write your code here
   const url = "http://localhost:4000/register";
   const response = await fetch(url, {
     method: "POST",
@@ -8,12 +7,10 @@ export const createUser = async (data) => {
       "Content-Type": "application/json",
     },
   });
-  //const responseData = await response.json();
   return await response.json();
 };
 
 export const login = async (data) => {
-  // write your code here
   const url = "http://localhost:4000/login";
   const response = await fetch(url, {
     method: "POST",
@@ -22,7 +19,6 @@ export const login = async (data) => {
       "Content-Type": "application/json",
     },
   });
-  //const responseData = await response.json();
   return await response.json();
 };
 
@@ -48,16 +44,33 @@ export const getAuthors = async () => {
   return await response.json();
 };
 
-export const getCurrentUser = async () => {
-  // write your code here
+export const getCurrentUser = async (accessToken) => {
+  const url = "http://localhost:4000/users/me";
+  console.log("api call = ", accessToken);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+    },
+  });
+  return await response.json();
 };
 
 export const updateCourseService = async () => {
   // write your code here
 };
 
-export const logout = async () => {
-  // write your code here
+export const logout = async (accessToken) => {
+  const url = "http://localhost:4000/logout";
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+    },
+  });
+  return await response.json();
 };
 
 export const deleteCourseService = async () => {

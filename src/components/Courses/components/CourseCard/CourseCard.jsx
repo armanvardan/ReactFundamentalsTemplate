@@ -37,12 +37,14 @@ import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse } from "../../../../store/slices/coursesSlice";
+import { getUserRoleSelector } from "../../../../store/selectors";
 
 export const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userRole = useSelector(getUserRoleSelector);
 
   function handleShowCourse(selectedCoursId) {
     navigate(`../courses/${selectedCoursId}`);
@@ -80,14 +82,18 @@ export const CourseCard = ({ course }) => {
               handleShowCourse(course.id);
             }}
           />
-          <Button
-            buttonText={"Delete"}
-            handleClick={() => {
-              handleDeleteCourse(course);
-            }}
-            data-testid="deleteCourse"
-          />
-          <Button buttonText={"Update"} data-testid="updateCourse" />
+          {userRole === "admin" && (
+            <>
+              <Button
+                buttonText={"Delete"}
+                handleClick={() => {
+                  handleDeleteCourse(course);
+                }}
+                data-testid="deleteCourse"
+              />
+              <Button buttonText={"Update"} data-testid="updateCourse" />
+            </>
+          )}
         </div>
       </div>
     </div>

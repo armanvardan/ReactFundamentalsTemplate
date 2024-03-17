@@ -10,10 +10,9 @@ import {
   CourseForm,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { getAuthors, getCourses } from "./services";
-import { setCourses } from "./store/slices/coursesSlice";
 import { useDispatch } from "react-redux";
-import { setAuthors } from "./store/slices/authorsSlice";
+import { getCoursesThunk } from "./store/thunks/coursesThunk";
+import { getAuthorsThunk } from "./store/thunks/authorsThunk";
 
 // Module 1:
 // * use mockedAuthorsList and mockedCoursesList mocked data
@@ -40,17 +39,8 @@ import { setAuthors } from "./store/slices/authorsSlice";
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchInitData = async () => {
-      const courses = await getCourses();
-      dispatch(setCourses(courses.result));
-
-      const authors = await getAuthors();
-      dispatch(setAuthors(authors.result));
-    };
-
-    fetchInitData();
-  }, [dispatch]);
+  dispatch(getCoursesThunk());
+  dispatch(getAuthorsThunk());
 
   return (
     <div className={styles.wrapper}>

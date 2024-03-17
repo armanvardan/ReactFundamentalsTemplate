@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from "./styles.module.css";
 import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
 import { Link } from "react-router-dom";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getCoursesSelector } from "../../store/selectors";
+import { getUserThunk } from "../../store/thunks/userThunk";
 
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
@@ -38,7 +39,18 @@ import { getCoursesSelector } from "../../store/selectors";
 //   ** CourseForm should be shown after a click on the "Add new course" button.
 
 export const Courses = () => {
-  const coursesList = useSelector(getCoursesSelector, shallowEqual);
+  const dispatch = useDispatch();
+  const coursesListData = useSelector(getCoursesSelector);
+  const coursesList = coursesListData;
+
+  useEffect(() => {
+    async function fetchData() {
+      const token = await localStorage.getItem("token");
+      console.log("arman0 token = ", token);
+      dispatch(getUserThunk(token));
+    }
+    fetchData();
+  }, [dispatch]);
 
   return (
     <>

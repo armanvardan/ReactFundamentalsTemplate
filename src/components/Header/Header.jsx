@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserNameSelector } from "../../store/selectors";
 import { removeUserData } from "../../store/slices/userSlice";
+import { logout } from "../../services";
 
 // Module 1:
 // * add Logo and Button components
@@ -57,10 +58,11 @@ export const Header = () => {
     navigate("../login", { replace: true });
   }
 
-  function btnLogoutClick() {
+  async function btnLogoutClick() {
     localStorage.removeItem("token");
     setToken(null);
     dispatch(removeUserData(null));
+    await logout(token);
     navigate("../login", { replace: true });
   }
 
