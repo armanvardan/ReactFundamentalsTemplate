@@ -5,7 +5,7 @@ import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
 import { Link } from "react-router-dom";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCoursesSelector } from "../../store/selectors";
 import { getUserThunk } from "../../store/thunks/userThunk";
 

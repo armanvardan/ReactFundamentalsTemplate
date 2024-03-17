@@ -1,5 +1,4 @@
 import { getCurrentUser } from "../../services";
-import { setUserData } from "../slices/userSlice";
 
 export const getUserThunk = (token) => {
   return async function (dispatch) {
