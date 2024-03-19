@@ -10,7 +10,6 @@ import {
   getAuthorsSelector,
   getCoursesSelector,
   getUserRoleSelector,
-  getUserTokenSelector,
 } from "../../store/selectors";
 import { getUserThunk } from "../../store/thunks/userThunk";
 
@@ -47,7 +46,7 @@ export const Courses = () => {
   const dispatch = useDispatch();
   const coursesList = useSelector(getCoursesSelector);
   const authorsList = useSelector(getAuthorsSelector);
-  const token = useSelector(getUserTokenSelector);
+  const token = localStorage.getItem("token");
   const userRole = useSelector(getUserRoleSelector);
 
   const authorMap = new Map(

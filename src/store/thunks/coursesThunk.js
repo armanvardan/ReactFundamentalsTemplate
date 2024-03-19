@@ -18,10 +18,10 @@ export const updateCourseThunk = (course) => {
   };
 };
 
-export const deleteCourseThunk = (course) => {
+export const deleteCourseThunk = (courseId) => {
   return async function (dispatch) {
-    await deleteCourseService(course);
-    dispatch(deleteCourse(course));
+    await deleteCourseService(courseId);
+    dispatch(deleteCourse(courseId));
   };
 };
 

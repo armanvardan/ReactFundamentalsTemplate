@@ -13,6 +13,6 @@ export const logoutThunk = () => {
   return async function (dispatch) {
     await logout();
 
-    dispatch(removeUserData(null));
+    dispatch(removeUserData());
   };
 };

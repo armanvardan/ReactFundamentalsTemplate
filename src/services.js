@@ -82,8 +82,8 @@ export const logout = async () => {
   });
 };
 
-export const deleteCourseService = async (course) => {
-  const url = `http://localhost:4000/courses/${course.id}`;
+export const deleteCourseService = async (courseId) => {
+  const url = `http://localhost:4000/courses/${courseId}`;
   const accessToken = localStorage.getItem("token");
   await fetch(url, {
     method: "DELETE",

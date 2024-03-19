@@ -15,7 +15,7 @@ export const coursesSlice = createSlice({
       state.value.push(action.payload);
     },
     deleteCourse: (state, action) => {
-      state.value = state.value.filter((item) => item.id !== action.payload.id);
+      state.value = state.value.filter((item) => item.id !== action.payload);
     },
     updateCourse: (state, action) => {
       let index = state.value.findIndex(

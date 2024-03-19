@@ -11,10 +11,9 @@ import {
   PrivateRoute,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getCoursesThunk } from "./store/thunks/coursesThunk";
 import { getAuthorsThunk } from "./store/thunks/authorsThunk";
-import { getUserTokenSelector } from "./store/selectors";
 
 // Module 1:
 // * use mockedAuthorsList and mockedCoursesList mocked data
@@ -40,7 +39,7 @@ import { getUserTokenSelector } from "./store/selectors";
 
 function App() {
   const dispatch = useDispatch();
-  const token = useSelector(getUserTokenSelector);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     dispatch(getCoursesThunk());
@@ -57,10 +56,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/courses" element={token ? <Courses /> : <Login />} />
-          <Route
-            path="/courses/:courseId"
-            element={token ? <CourseInfo /> : <Login />}
-          />
+          <Route path="/courses/:courseId" element={<CourseInfo />} />
           <Route
             path="/courses/update/:courseId"
             element={

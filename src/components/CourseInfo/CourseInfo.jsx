@@ -43,10 +43,7 @@ export const CourseInfo = () => {
   const authorsList = useSelector(getAuthorsSelector);
 
   useEffect(() => {
-    if (!courseId || !authorsList.length || !coursesList.length) {
-      return;
-    }
-    const course = coursesList?.find((course) => course.id === courseId);
+    const course = coursesList.find((course) => course.id === courseId);
     setSelectedCours(course);
 
     const authors = course.authors.map((courseAuthor) => {

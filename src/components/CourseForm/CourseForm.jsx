@@ -52,7 +52,11 @@ import { AuthorItem, CreateAuthor } from "./components";
 import { getCourseDuration } from "../../helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuthorsSelector, getCoursesSelector } from "../../store/selectors";
+import {
+  getAuthorsSelector,
+  getCoursesSelector,
+  getUserRoleSelector,
+} from "../../store/selectors";
 import {
   createCourseThunk,
   updateCourseThunk,
@@ -65,6 +69,7 @@ export const CourseForm = () => {
 
   const getAuthorList = useSelector(getAuthorsSelector);
   const getCourseList = useSelector(getCoursesSelector);
+  const userRole = useSelector(getUserRoleSelector);
   let { courseId } = useParams();
 
   const [currentCourse, setCurrentCourse] = useState([]);
@@ -87,6 +92,12 @@ export const CourseForm = () => {
       value: 0,
     },
   });
+
+  useEffect(() => {
+    if (userRole !== "admin") {
+      navigate("/", { replace: false });
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     if (courseId && getCourseList && getAuthorList) {

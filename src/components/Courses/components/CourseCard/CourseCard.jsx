@@ -50,8 +50,8 @@ export const CourseCard = ({ course }) => {
     navigate(`../courses/${selectedCoursId}`);
   }
 
-  function handleDeleteCourse(course) {
-    dispatch(deleteCourseThunk(course));
+  function handleDeleteCourse(courseId) {
+    dispatch(deleteCourseThunk(courseId));
   }
 
   function handleUpdateCourse(courseId) {
@@ -91,7 +91,7 @@ export const CourseCard = ({ course }) => {
               <Button
                 buttonText={"Delete"}
                 handleClick={() => {
-                  handleDeleteCourse(course);
+                  handleDeleteCourse(course.id);
                 }}
                 data-testid="deleteCourse"
               />
