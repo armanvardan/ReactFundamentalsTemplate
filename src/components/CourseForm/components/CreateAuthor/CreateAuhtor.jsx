@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { Button, Input } from "../../../../common";
 import { useDispatch } from "react-redux";
-import { saveAuthor } from "../../../../store/slices/authorsSlice";
+import { createAuthorThunk } from "../../../../store/thunks/authorsThunk";
 
 export const CreateAuthor = () => {
   const dispatch = useDispatch();
@@ -16,11 +16,7 @@ export const CreateAuthor = () => {
   function handleCreateAuthor(event) {
     event.preventDefault();
     if (inputValue.length > 2) {
-      const newAuthor = {
-        id: Math.round(Math.random() * 1000000).toString(),
-        name: inputValue,
-      };
-      dispatch(saveAuthor(newAuthor));
+      dispatch(createAuthorThunk({ name: inputValue }));
     }
   }
 

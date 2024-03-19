@@ -5,8 +5,13 @@ import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
 import { Link } from "react-router-dom";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { getCoursesSelector } from "../../store/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAuthorsSelector,
+  getCoursesSelector,
+  getUserRoleSelector,
+  getUserTokenSelector,
+} from "../../store/selectors";
 import { getUserThunk } from "../../store/thunks/userThunk";
 
 // Module 1:
@@ -40,29 +45,36 @@ import { getUserThunk } from "../../store/thunks/userThunk";
 
 export const Courses = () => {
   const dispatch = useDispatch();
-  const coursesListData = useSelector(getCoursesSelector);
-  const coursesList = coursesListData;
+  const coursesList = useSelector(getCoursesSelector);
+  const authorsList = useSelector(getAuthorsSelector);
+  const token = useSelector(getUserTokenSelector);
+  const userRole = useSelector(getUserRoleSelector);
+
+  const authorMap = new Map(
+    authorsList.map((author) => [author.id, author.name])
+  );
+
+  // Replace author IDs with names in coursesList
+  const updatedCoursesList = coursesList.map((course) => ({
+    ...course,
+    authors: course.authors.map((authorId) => authorMap.get(authorId)),
+  }));
 
   useEffect(() => {
-    async function fetchData() {
-      const token = await localStorage.getItem("token");
-      console.log("arman0 token = ", token);
-      dispatch(getUserThunk(token));
-    }
-    fetchData();
-  }, [dispatch]);
+    dispatch(getUserThunk(token));
+  }, [dispatch, token]);
 
   return (
     <>
-      {coursesList?.length > 0 && (
+      {updatedCoursesList?.length > 0 && userRole === "admin" && (
         <div className={styles.panel}>
           <Link to="/courses/add">
             <Button buttonText={"ADD NEW COURSE"} />
           </Link>
         </div>
       )}
-      {coursesList?.length > 0 ? (
-        coursesList.map((courseItem) => (
+      {updatedCoursesList?.length > 0 ? (
+        updatedCoursesList.map((courseItem) => (
           <CourseCard course={courseItem} key={courseItem.id} />
         ))
       ) : (

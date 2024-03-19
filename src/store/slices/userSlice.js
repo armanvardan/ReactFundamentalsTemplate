@@ -13,7 +13,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      console.log("action.payload.role");
       state.isAuth = true;
       state.name = action.payload.name;
       state.email = action.payload.email;

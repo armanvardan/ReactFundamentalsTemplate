@@ -12,6 +12,7 @@ export const Input = ({
   "data-testid": dataTestId,
   isValid,
   isNumber,
+  defaultValue,
 }) => {
   return (
     <>
@@ -27,6 +28,7 @@ export const Input = ({
           }
           data-testid={dataTestId}
           type={isNumber ? "number" : "string"}
+          defaultValue={defaultValue}
         />
         {!isValid && (
           <span className={styles.invalid}>{labelText} is required</span>

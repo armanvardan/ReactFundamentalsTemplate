@@ -9,7 +9,13 @@
 // ** TASK DESCRIPTION ** - https://d17btkcdsmqrmh.cloudfront.net/new-react-fundamentals/docs/module-4/home-task/components#private-route-new-component
 
 import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { getUserRoleSelector } from "../../store/selectors";
 
 export const PrivateRoute = ({ children }) => {
-  return { children };
+  const userRole = useSelector(getUserRoleSelector);
+  const auth = userRole === "admin";
+
+  return auth ? children : <Navigate to="/courses" />;
 };

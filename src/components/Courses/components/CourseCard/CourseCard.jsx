@@ -38,8 +38,8 @@ import styles from "./styles.module.css";
 import { Button } from "../../../../common";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCourse } from "../../../../store/slices/coursesSlice";
 import { getUserRoleSelector } from "../../../../store/selectors";
+import { deleteCourseThunk } from "../../../../store/thunks/coursesThunk";
 
 export const CourseCard = ({ course }) => {
   const navigate = useNavigate();
@@ -51,7 +51,11 @@ export const CourseCard = ({ course }) => {
   }
 
   function handleDeleteCourse(course) {
-    dispatch(deleteCourse(course));
+    dispatch(deleteCourseThunk(course));
+  }
+
+  function handleUpdateCourse(courseId) {
+    navigate(`../courses/update/${courseId}`);
   }
 
   return (
@@ -63,12 +67,12 @@ export const CourseCard = ({ course }) => {
       <div className={styles.cardDetails}>
         <p>
           <b>Authors: </b>
-          {course.authors.map((author) => {
-            return author.length > 1 ? course.authors[0] + "..." : author;
-          })}
+          {course.authors.length > 1
+            ? course.authors[0] + "..."
+            : course.authors[0]}
         </p>
         <p>
-          <b>Duration:</b>
+          <b>Duration: </b>
           <span>{getCourseDuration(course.duration)}</span>
         </p>
         <p>
@@ -91,7 +95,13 @@ export const CourseCard = ({ course }) => {
                 }}
                 data-testid="deleteCourse"
               />
-              <Button buttonText={"Update"} data-testid="updateCourse" />
+              <Button
+                buttonText={"Update"}
+                handleClick={() => {
+                  handleUpdateCourse(course.id);
+                }}
+                data-testid="updateCourse"
+              />
             </>
           )}
         </div>

@@ -65,11 +65,13 @@ export const Login = () => {
         password: allForms[1].value,
       };
       const createUserResponse = await login(data);
-      localStorage.setItem("token", JSON.stringify(createUserResponse.result));
+      const tokenCode = createUserResponse.result.split(" ")[1];
+      localStorage.setItem("token", tokenCode);
       await dispatch(
         setUserData({
-          name: createUserResponse.user.name,
+          name: createUserResponse.user.name || "",
           email: createUserResponse.user.email,
+          token: tokenCode,
         })
       );
       navigate("../courses", { replace: true });

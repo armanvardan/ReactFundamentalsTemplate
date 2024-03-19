@@ -46,41 +46,78 @@ export const getAuthors = async () => {
 
 export const getCurrentUser = async (accessToken) => {
   const url = "http://localhost:4000/users/me";
-  console.log("api call = ", accessToken);
   const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: accessToken,
+      Authorization: "Bearer " + accessToken,
     },
   });
   return await response.json();
 };
 
-export const updateCourseService = async () => {
-  // write your code here
+export const updateCourseService = async (course) => {
+  const url = `http://localhost:4000/courses/${course.id}`;
+  const accessToken = localStorage.getItem("token");
+  const response = await fetch(url, {
+    method: "PUT",
+    body: JSON.stringify(course),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return await response.json();
 };
 
-export const logout = async (accessToken) => {
+export const logout = async () => {
   const url = "http://localhost:4000/logout";
-  const response = await fetch(url, {
+  const accessToken = localStorage.getItem("token");
+  await fetch(url, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: accessToken,
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+};
+
+export const deleteCourseService = async (course) => {
+  const url = `http://localhost:4000/courses/${course.id}`;
+  const accessToken = localStorage.getItem("token");
+  await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+};
+
+export const createCourse = async (data) => {
+  const url = "http://localhost:4000/courses/add";
+  const accessToken = localStorage.getItem("token");
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
     },
   });
   return await response.json();
 };
 
-export const deleteCourseService = async () => {
-  // write your code here
-};
-
-export const createCourse = async () => {
-  // write your code here
-};
-
-export const createAuthor = async () => {
-  // write your code here
+export const createAuthor = async (author) => {
+  const url = "http://localhost:4000/authors/add";
+  const accessToken = localStorage.getItem("token");
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(author),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return await response.json();
 };

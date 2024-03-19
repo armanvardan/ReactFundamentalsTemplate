@@ -50,18 +50,26 @@ import styles from "./styles.module.css";
 import { Button, Input } from "../../common";
 import { AuthorItem, CreateAuthor } from "./components";
 import { getCourseDuration } from "../../helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuthorsSelector } from "../../store/selectors";
-import { saveCourse } from "../../store/slices/coursesSlice";
+import { getAuthorsSelector, getCoursesSelector } from "../../store/selectors";
+import {
+  createCourseThunk,
+  updateCourseThunk,
+} from "../../store/thunks/coursesThunk";
 
 export const CourseForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [firstRender, setFirstRender] = useState(true);
 
   const getAuthorList = useSelector(getAuthorsSelector);
-  const dispatch = useDispatch();
+  const getCourseList = useSelector(getCoursesSelector);
+  let { courseId } = useParams();
 
-  const [currentAuthorList, setCureentAuthorList] = useState([]);
+  const [currentCourse, setCurrentCourse] = useState([]);
+  const [currentCourseAuthorList, setCurrentCourseAuthorList] = useState();
+  const [currentAuthorList, setCurrentAuthorList] = useState([]);
   const [formValues, setFormValues] = useState({
     title: {
       name: "title",
@@ -78,68 +86,64 @@ export const CourseForm = () => {
       isValid: true,
       value: 0,
     },
-    courseAuthors: {
-      name: "courseAuthors",
-      isValid: true,
-      value: [],
-    },
   });
 
   useEffect(() => {
-    const newAuthorsList = getAuthorList?.filter((author) => {
-      return !formValues.courseAuthors.value.some(
-        (courseItem) => courseItem.id === author.id
+    if (courseId && getCourseList && getAuthorList) {
+      const currentCourseInfo = getCourseList.find((course) => {
+        return course.id === courseId;
+      });
+      setCurrentCourse(currentCourseInfo);
+
+      const courseAuthorsList = currentCourseInfo.authors.map(
+        (courseAuthor) => {
+          return getAuthorList.find((author) => {
+            return author.id === courseAuthor;
+          });
+        }
       );
-    });
-    setCureentAuthorList(newAuthorsList);
-  }, [getAuthorList, formValues.courseAuthors.value]);
+      setCurrentCourseAuthorList((prevState) => courseAuthorsList);
+
+      formValues.title.value = currentCourseInfo.title;
+      formValues.description.value = currentCourseInfo.description;
+      formValues.duration.value = currentCourseInfo.duration;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, getCourseList, getAuthorList]);
+
+  useEffect(() => {
+    if (firstRender && currentCourseAuthorList && getAuthorList) {
+      const newAuthorsList = getAuthorList?.filter((author) => {
+        return !currentCourseAuthorList.some(
+          (courseItem) => courseItem.id === author.id
+        );
+      });
+      setCurrentAuthorList(newAuthorsList);
+      setFirstRender(false);
+    }
+  }, [getAuthorList, currentCourseAuthorList, firstRender]);
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
     const newList = currentAuthorList?.filter((item) => {
       return author.id !== item.id;
     });
-    setCureentAuthorList(newList);
-
-    const oldFormsValue = { ...formValues.courseAuthors };
-    oldFormsValue.value.push(author);
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        courseAuthors: oldFormsValue,
-      };
-    });
+    setCurrentAuthorList(newList);
+    setCurrentCourseAuthorList([...currentCourseAuthorList, author]);
   }
 
   function handleClickDeleteAuthor(event, author) {
     event.preventDefault();
-    const oldCourseAuthors = { ...formValues.courseAuthors };
-    const newList = oldCourseAuthors.value?.filter((item) => {
+
+    const newList = currentCourseAuthorList.filter((item) => {
       return author.id !== item.id;
     });
-    oldCourseAuthors.value = newList;
 
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        courseAuthors: oldCourseAuthors,
-      };
+    setCurrentCourseAuthorList((prevState) => {
+      return [...newList];
     });
-
-    setCureentAuthorList([...currentAuthorList, author]);
+    setCurrentAuthorList([...currentAuthorList, author]);
   }
-
-  // function createAuthorButton(event, authorName) {
-  //   event.preventDefault();
-  //   if (authorName.length > 2) {
-  //     const newAuthor = {
-  //       id: Math.round(Math.random() * 1000000).toString(),
-  //       name: authorName,
-  //     };
-  //     dispatch(saveAuthor(newAuthor));
-  //     setCureentAuthorList((prevState) => [...prevState, newAuthor]);
-  //   }
-  // }
 
   function changeDuration(event) {
     const oldDuration = { ...formValues.duration };
@@ -160,23 +164,28 @@ export const CourseForm = () => {
     event.preventDefault();
     let hasError = await checkErrors();
     if (!hasError) {
-      const authors = currentAuthorList.map((author) => author.name);
-
       const today = new Date();
       const day = today.getDate();
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const formattedDate = `${month}/${day}/${year}`;
 
+      const courseAuthors = currentCourseAuthorList.map((author) => author.id);
+
       const newCourse = {
-        authors: authors,
+        authors: courseAuthors,
         creationDate: formattedDate,
         description: formValues.description.value,
-        duration: formValues.duration.value,
+        duration: parseInt(formValues.duration.value),
         id: Math.round(Math.random() * 1000000000000000).toString(),
         title: formValues.title.value,
       };
-      dispatch(saveCourse(newCourse));
+      if (courseId) {
+        newCourse.id = courseId;
+        dispatch(updateCourseThunk(newCourse));
+      } else {
+        dispatch(createCourseThunk(newCourse));
+      }
       navigate("../courses", { replace: false });
     }
   }
@@ -187,6 +196,7 @@ export const CourseForm = () => {
     for (let form in oldForms) {
       const formItem = { ...oldForms[form] };
       formItem.isValid = true;
+      console.log("formItem = ", formValues);
       if (formItem.name === "title" || formItem.name === "description") {
         if (formItem.value.length <= 2) {
           hasError = true;
@@ -226,6 +236,7 @@ export const CourseForm = () => {
           data-testid="titleInput"
           isValid={formValues.title.isValid}
           onChange={handleTitleChange}
+          defaultValue={currentCourse && currentCourse.title}
         />
 
         <label>
@@ -238,6 +249,7 @@ export const CourseForm = () => {
                 : `${styles.description} ${styles.descriptionInvalid}`
             }
             onChange={handleDescriptionChange}
+            defaultValue={currentCourse && currentCourse.description}
           />
           {!formValues.description.isValid && (
             <span className={styles.invalid}>
@@ -256,6 +268,7 @@ export const CourseForm = () => {
                 data-testid="durationInput"
                 onChange={changeDuration}
                 isNumber={true}
+                defaultValue={currentCourse && currentCourse.duration}
               />
               {formValues.duration.value &&
                 getCourseDuration(formValues.duration.value)}
@@ -281,10 +294,11 @@ export const CourseForm = () => {
 
           <div className={styles.courseAuthorsContainer}>
             <h2>Course authors</h2>
-            {formValues.courseAuthors.value.length === 0 ? (
+            {currentCourseAuthorList && currentCourseAuthorList.length === 0 ? (
               <p className={styles.notification}>List is empty</p>
             ) : (
-              formValues.courseAuthors.value.map((author) => (
+              currentCourseAuthorList &&
+              currentCourseAuthorList.map((author) => (
                 <AuthorItem
                   key={author.id}
                   author={author}
@@ -301,7 +315,7 @@ export const CourseForm = () => {
       <div className={styles.buttonsContainer}>
         <Button buttonText={"Cancel"} handleClick={handleCancelBut} />
         <Button
-          buttonText={"Create Course"}
+          buttonText={courseId ? "Update Course" : "Create Course"}
           handleClick={handleCreateCourseBut}
           data-testid="createCourseButton"
         />

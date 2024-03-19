@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Logo } from "./components";
 import { Button } from "../../common";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserNameSelector } from "../../store/selectors";
-import { removeUserData } from "../../store/slices/userSlice";
-import { logout } from "../../services";
+import {
+  getUserNameSelector,
+  getUserTokenSelector,
+} from "../../store/selectors";
+import { logoutThunk } from "../../store/thunks/userThunk";
 
 // Module 1:
 // * add Logo and Button components
@@ -40,29 +42,23 @@ import { logout } from "../../services";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
   const [token, setToken] = useState("");
   const userName = useSelector(getUserNameSelector);
+  const tokenValue = useSelector(getUserTokenSelector);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/", { replace: false });
-      return;
-    }
-    setToken(token);
-  }, [location, navigate]);
+    setToken(tokenValue);
+  }, [tokenValue]);
 
   function btnLoginClick() {
     navigate("../login", { replace: true });
   }
 
   async function btnLogoutClick() {
+    dispatch(logoutThunk());
     localStorage.removeItem("token");
     setToken(null);
-    dispatch(removeUserData(null));
-    await logout(token);
     navigate("../login", { replace: true });
   }
 
