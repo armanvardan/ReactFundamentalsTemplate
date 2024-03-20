@@ -43,21 +43,23 @@ export const CourseInfo = () => {
   const authorsList = useSelector(getAuthorsSelector);
 
   useEffect(() => {
-    const course = coursesList.find((course) => course.id === courseId);
-    setSelectedCours(course);
+    if (authorsList && courseId && coursesList) {
+      const course = coursesList.find((course) => course.id === courseId);
+      setSelectedCours(course);
 
-    const authors = course.authors.map((courseAuthor) => {
-      return authorsList?.find((author) => {
-        return author.id === courseAuthor;
+      const authors = course.authors.map((courseAuthor) => {
+        return authorsList?.find((author) => {
+          return author.id === courseAuthor;
+        });
       });
-    });
-    let showingAuthor;
-    if (authors?.length > 1) {
-      showingAuthor = authors[0].name + "...";
-    } else {
-      showingAuthor = authors[0].name;
+      let showingAuthor;
+      if (authors?.length > 1) {
+        showingAuthor = authors[0].name + "...";
+      } else {
+        showingAuthor = authors[0].name;
+      }
+      setAuthors(showingAuthor);
     }
-    setAuthors(showingAuthor);
   }, [authorsList, courseId, coursesList, navigate]);
 
   return (

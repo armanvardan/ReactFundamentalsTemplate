@@ -36,7 +36,7 @@ import { getCourseDuration, formatCreationDate } from "../../../../helpers";
 
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserRoleSelector } from "../../../../store/selectors";
 import { deleteCourseThunk } from "../../../../store/thunks/coursesThunk";
@@ -52,10 +52,6 @@ export const CourseCard = ({ course }) => {
 
   function handleDeleteCourse(courseId) {
     dispatch(deleteCourseThunk(courseId));
-  }
-
-  function handleUpdateCourse(courseId) {
-    navigate(`../courses/update/${courseId}`);
   }
 
   return (
@@ -95,13 +91,9 @@ export const CourseCard = ({ course }) => {
                 }}
                 data-testid="deleteCourse"
               />
-              <Button
-                buttonText={"Update"}
-                handleClick={() => {
-                  handleUpdateCourse(course.id);
-                }}
-                data-testid="updateCourse"
-              />
+              <Link to={`../courses/update/${course.id}`}>
+                <Button buttonText={"Update"} data-testid="updateCourse" />
+              </Link>
             </>
           )}
         </div>

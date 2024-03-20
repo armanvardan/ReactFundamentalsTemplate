@@ -1,8 +1,8 @@
 export const getCourseDuration = (duration) => {
-  // write your solution here
   duration = parseInt(duration);
   if (duration >= 60) {
     let hour = Math.floor(duration / 60);
+    const hourText = hour === 1 ? "hour" : "hours";
     let min = duration - hour * 60;
     if (min < 10) {
       min = "0" + min;
@@ -10,7 +10,6 @@ export const getCourseDuration = (duration) => {
     if (hour < 10) {
       hour = "0" + hour;
     }
-    const hourText = hour === 1 ? "hour" : "hours";
     duration = hour + ":" + min + " " + hourText;
   } else {
     if (duration < 10) {

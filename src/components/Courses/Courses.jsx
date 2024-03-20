@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./styles.module.css";
 import { CourseCard } from "./components";
 import { Button } from "../../common";
 import { EmptyCourseList } from "./components/EmptyCourseList/EmptyCourseList";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAuthorsSelector,
@@ -44,20 +44,31 @@ import { getUserThunk } from "../../store/thunks/userThunk";
 
 export const Courses = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const coursesList = useSelector(getCoursesSelector);
   const authorsList = useSelector(getAuthorsSelector);
   const token = localStorage.getItem("token");
   const userRole = useSelector(getUserRoleSelector);
+  const [updatedCoursesList, setUpdatedCoursesList] = useState();
 
-  const authorMap = new Map(
-    authorsList.map((author) => [author.id, author.name])
-  );
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/", { replace: false });
+      return;
+    }
+    if (coursesList && authorsList) {
+      const authorMap = new Map(
+        authorsList.map((author) => [author.id, author.name])
+      );
 
-  // Replace author IDs with names in coursesList
-  const updatedCoursesList = coursesList.map((course) => ({
-    ...course,
-    authors: course.authors.map((authorId) => authorMap.get(authorId)),
-  }));
+      const _updatedCoursesList = coursesList.map((course) => ({
+        ...course,
+        authors: course.authors.map((authorId) => authorMap.get(authorId)),
+      }));
+      setUpdatedCoursesList(_updatedCoursesList);
+    }
+  }, [navigate, coursesList, authorsList]);
 
   useEffect(() => {
     dispatch(getUserThunk(token));
@@ -74,7 +85,11 @@ export const Courses = () => {
       )}
       {updatedCoursesList?.length > 0 ? (
         updatedCoursesList.map((courseItem) => (
-          <CourseCard course={courseItem} key={courseItem.id} />
+          <CourseCard
+            course={courseItem}
+            key={courseItem.id}
+            data-testid="courseCard"
+          />
         ))
       ) : (
         <EmptyCourseList

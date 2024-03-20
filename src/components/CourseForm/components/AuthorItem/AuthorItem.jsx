@@ -8,7 +8,6 @@ export const AuthorItem = ({ author, handleAddClick, handleDeleteClick }) => {
       {handleAddClick && (
         <Button
           buttonText={"Add Author"}
-          data-testid="addAuthor"
           handleClick={(event) => handleAddClick(event, author.name)}
         />
       )}

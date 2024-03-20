@@ -95,7 +95,7 @@ export const CourseForm = () => {
 
   useEffect(() => {
     if (userRole !== "admin") {
-      navigate("/", { replace: false });
+      navigate("/courses", { replace: false });
     }
   }, [userRole, navigate]);
 
@@ -207,7 +207,6 @@ export const CourseForm = () => {
     for (let form in oldForms) {
       const formItem = { ...oldForms[form] };
       formItem.isValid = true;
-      console.log("formItem = ", formValues);
       if (formItem.name === "title" || formItem.name === "description") {
         if (formItem.value.length <= 2) {
           hasError = true;
@@ -295,6 +294,7 @@ export const CourseForm = () => {
                   <AuthorItem
                     key={author.id}
                     author={author}
+                    data-testid="addAuthor"
                     handleAddClick={(event) =>
                       handleClickAddAuthor(event, author)
                     }
@@ -313,6 +313,7 @@ export const CourseForm = () => {
                 <AuthorItem
                   key={author.id}
                   author={author}
+                  data-testid="deleteAuthor"
                   handleDeleteClick={(event) =>
                     handleClickDeleteAuthor(event, author)
                   }
