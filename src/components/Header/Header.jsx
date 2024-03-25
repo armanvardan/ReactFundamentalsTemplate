@@ -52,14 +52,14 @@ export const Header = () => {
   }, [tokenValue]);
 
   function btnLoginClick() {
-    navigate("../login", { replace: true });
+    navigate("/login", { replace: true });
   }
 
-  async function btnLogoutClick() {
+  function btnLogoutClick() {
     dispatch(logoutThunk());
     localStorage.removeItem("token");
     setToken(null);
-    navigate("../login", { replace: true });
+    navigate("/login", { replace: true });
   }
 
   return (

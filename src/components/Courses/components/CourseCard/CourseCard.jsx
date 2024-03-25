@@ -47,7 +47,7 @@ export const CourseCard = ({ course }) => {
   const userRole = useSelector(getUserRoleSelector);
 
   function handleShowCourse(selectedCoursId) {
-    navigate(`../courses/${selectedCoursId}`);
+    navigate(`/courses/${selectedCoursId}`);
   }
 
   function handleDeleteCourse(courseId) {
@@ -57,23 +57,29 @@ export const CourseCard = ({ course }) => {
   return (
     <div className={styles.cardContainer} data-testid="courseCard">
       <div className={styles.cardText}>
-        <h2>{course.title}</h2>
+        <h2 data-testid="title">{course.title}</h2>
         <p>{course.description}</p>
       </div>
       <div className={styles.cardDetails}>
         <p>
           <b>Authors: </b>
-          {course.authors.length > 1
-            ? course.authors[0] + "..."
-            : course.authors[0]}
+          <span data-testid="authors">
+            {course.authors.length > 1
+              ? course.authors[0] + "..."
+              : course.authors[0]}
+          </span>
         </p>
         <p>
           <b>Duration: </b>
-          <span>{getCourseDuration(course.duration)}</span>
+          <span data-testid="duration">
+            {getCourseDuration(course.duration)}
+          </span>
         </p>
         <p>
           <b>Created: </b>
-          <span>{formatCreationDate(course.creationDate)}</span>
+          <span data-testid="date">
+            {formatCreationDate(course.creationDate)}
+          </span>
         </p>
         <div className={styles.buttonsContainer}>
           <Button

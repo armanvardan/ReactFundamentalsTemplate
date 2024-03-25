@@ -69,12 +69,14 @@ export const Login = () => {
       localStorage.setItem("token", tokenCode);
       await dispatch(
         setUserData({
-          name: createUserResponse.user.name || "",
+          name: createUserResponse.user.name
+            ? createUserResponse.user.name
+            : "",
           email: createUserResponse.user.email,
           token: tokenCode,
         })
       );
-      navigate("../courses", { replace: true });
+      navigate("/courses");
     }
   }
 

@@ -168,7 +168,7 @@ export const CourseForm = () => {
   }
 
   function handleCancelBut() {
-    navigate("../courses", { replace: false });
+    navigate("/courses", { replace: false });
   }
 
   async function handleCreateCourseBut(event) {
@@ -197,11 +197,11 @@ export const CourseForm = () => {
       } else {
         dispatch(createCourseThunk(newCourse));
       }
-      navigate("../courses", { replace: false });
+      navigate("/courses", { replace: false });
     }
   }
 
-  async function checkErrors() {
+  function checkErrors() {
     let hasError = false;
     let oldForms = { ...formValues };
     for (let form in oldForms) {
@@ -223,7 +223,7 @@ export const CourseForm = () => {
         [formItem.name]: formItem,
       };
     }
-    await setFormValues(oldForms);
+    setFormValues(oldForms);
     return hasError;
   }
 
@@ -289,17 +289,18 @@ export const CourseForm = () => {
 
             <div className={styles.authorsContainer}>
               <h3>Authors List</h3>
-              {currentAuthorList &&
-                currentAuthorList?.map((author) => (
-                  <AuthorItem
-                    key={author.id}
-                    author={author}
-                    data-testid="addAuthor"
-                    handleAddClick={(event) =>
-                      handleClickAddAuthor(event, author)
-                    }
-                  />
-                ))}
+              <span>
+                {currentAuthorList &&
+                  currentAuthorList.map((author) => (
+                    <AuthorItem
+                      key={author.id}
+                      author={author}
+                      handleAddClick={(event) =>
+                        handleClickAddAuthor(event, author)
+                      }
+                    />
+                  ))}
+              </span>
             </div>
           </div>
 

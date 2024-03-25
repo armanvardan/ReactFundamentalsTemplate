@@ -52,7 +52,6 @@ export const Courses = () => {
   const [updatedCoursesList, setUpdatedCoursesList] = useState();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/", { replace: false });
       return;
@@ -68,7 +67,7 @@ export const Courses = () => {
       }));
       setUpdatedCoursesList(_updatedCoursesList);
     }
-  }, [navigate, coursesList, authorsList]);
+  }, [navigate, coursesList, authorsList, token]);
 
   useEffect(() => {
     dispatch(getUserThunk(token));

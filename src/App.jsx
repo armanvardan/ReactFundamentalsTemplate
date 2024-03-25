@@ -55,7 +55,7 @@ function App() {
           <Route path="/" element={token ? <Courses /> : <Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
-          <Route path="/courses" element={token ? <Courses /> : <Login />} />
+          <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:courseId" element={<CourseInfo />} />
           <Route
             path="/courses/update/:courseId"
