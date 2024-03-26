@@ -12,13 +12,12 @@ jest.mock("react-redux", () => ({
 }));
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useParams: () => ({ courseId: 123 }),
 }));
 
 describe("CourseForm", () => {
   const mockStore = configureStore();
 
-  it("adds an author to the course authors list when 'Add author' button is clicked", async () => {
+  it("CourseForm 'Add author' button click should add an author to the course authors list", async () => {
     const dispatch = jest.fn();
     jest.spyOn(require("react-redux"), "useDispatch").mockReturnValue(dispatch);
 
@@ -46,7 +45,7 @@ describe("CourseForm", () => {
     expect(mockCreateAuthorThunk).toHaveBeenCalledWith({ name: "New Author" });
   });
 
-  it("should render authors lists (all and course authors)", async () => {
+  it("CourseForm should show authors lists (all and course authors)", async () => {
     const authorList = [
       { id: "1", name: "Author 1" },
       { id: "2", name: "Author 2" },
@@ -86,7 +85,7 @@ describe("CourseForm", () => {
           case "getAuthorsSelector":
             return authorList;
           case "getCoursesSelector":
-            return coursesList; // Return coursesList here
+            return coursesList;
           case "getUserRoleSelector":
             return "admin";
           default:
@@ -110,7 +109,6 @@ describe("CourseForm", () => {
       });
     });
 
-    // Extract currentCourseAuthorList based on the courseId
     const currentCourse = coursesList.find((course) => course.id === courseId);
     const currentCourseAuthorList = currentCourse ? currentCourse.authors : [];
 
@@ -120,4 +118,24 @@ describe("CourseForm", () => {
       });
     });
   });
+
+  it("CourseForm 'Create author' button click should call dispatch.", async () => {
+    const dispatch = jest.fn();
+    jest.spyOn(require("react-redux"), "useDispatch").mockReturnValue(dispatch);
+
+    render(
+      <Provider store={mockStore({})}>
+        <Router>
+          <CourseForm />
+        </Router>
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByTestId("createAuthorButton"));
+
+    waitFor(() => {
+      expect(dispatch).toHaveBeenCalled();
+    });
+  });
+
 });

@@ -57,7 +57,7 @@ describe("Course Card", () => {
 
   it("CourseCard should display duration in the correct format", () => {
     const store = mockStore({
-      userRole: "admin", // Provide userRole for testing the admin condition
+      userRole: "admin",
     });
 
     render(
@@ -96,11 +96,10 @@ describe("Course Card", () => {
       </Provider>
     );
 
-    // Get the span element using data-testid
     const authorsSpan = screen.getByTestId("authors");
-    // Check if the span element is not empty
+
     expect(authorsSpan).toBeInTheDocument();
-    // Alternatively, you can check if it contains any text
+
     expect(authorsSpan.textContent.trim()).toBeTruthy();
   });
 });
