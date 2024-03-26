@@ -1,8 +1,10 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { CourseCard } from "../CourseCard";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import configureStore from "redux-mock-store";
+import { BrowserRouter as Router } from "react-router-dom";
+import { deleteCourseThunk } from "../../../../../store/thunks/coursesThunk";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -101,5 +103,37 @@ describe("Course Card", () => {
     expect(authorsSpan).toBeInTheDocument();
 
     expect(authorsSpan.textContent.trim()).toBeTruthy();
+  });
+
+  it("dispatches deleteCourseThunk with the correct courseId when Delete button is clicked", async () => {
+    const course = {
+      id: "123",
+      title: "Test Course",
+      description: "This is a test course",
+      authors: ["Author 1", "Author 2"],
+      duration: 60,
+      creationDate: "2024-03-26",
+    };
+
+    const dispatchMock = jest.fn();
+    useDispatch.mockReturnValue(dispatchMock);
+
+    const store = mockStore({
+      userRole: "admin", // Ensure userRole is set to "admin"
+    });
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <CourseCard course={course} />
+        </Router>
+      </Provider>
+    );
+
+    waitFor(() => {
+      const deleteCourseButton = screen.getByText("Delete");
+      fireEvent.click(deleteCourseButton);
+      expect(dispatchMock).toHaveBeenCalledWith(deleteCourseThunk("123"));
+    });
   });
 });

@@ -137,5 +137,4 @@ describe("CourseForm", () => {
       expect(dispatch).toHaveBeenCalled();
     });
   });
-
 });
