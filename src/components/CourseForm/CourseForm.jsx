@@ -65,7 +65,6 @@ import {
 export const CourseForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [firstRender, setFirstRender] = useState(true);
 
   const getAuthorList = useSelector(getAuthorsSelector);
   const getCourseList = useSelector(getCoursesSelector);
@@ -73,7 +72,7 @@ export const CourseForm = () => {
   let { courseId } = useParams();
 
   const [currentCourse, setCurrentCourse] = useState([]);
-  const [currentCourseAuthorList, setCurrentCourseAuthorList] = useState();
+  const [currentCourseAuthorList, setCurrentCourseAuthorList] = useState([]);
   const [currentAuthorList, setCurrentAuthorList] = useState([]);
   const [formValues, setFormValues] = useState({
     title: {
@@ -100,11 +99,23 @@ export const CourseForm = () => {
   }, [userRole, navigate]);
 
   useEffect(() => {
-    if (courseId && getCourseList && getAuthorList) {
-      const currentCourseInfo = getCourseList.find((course) => {
+    if (getCourseList && getAuthorList) {
+      let currentCourseInfo = getCourseList.find((course) => {
         return course.id === courseId;
       });
-      setCurrentCourse(currentCourseInfo);
+      if (currentCourseInfo) {
+        setCurrentCourse(currentCourseInfo);
+      } else {
+        currentCourseInfo = {
+          authors: [],
+          creationDate: "",
+          description: "",
+          duration: 0,
+          id: Math.round(Math.random() * 1000000000000000).toString(),
+          title: "",
+        };
+        setCurrentCourse(currentCourseInfo);
+      }
 
       const courseAuthorsList = currentCourseInfo.authors.map(
         (courseAuthor) => {
@@ -113,6 +124,14 @@ export const CourseForm = () => {
           });
         }
       );
+
+      const newAuthorsList = getAuthorList?.filter((author) => {
+        return !courseAuthorsList.some(
+          (courseItem) => courseItem.id === author.id
+        );
+      });
+      setCurrentAuthorList(newAuthorsList);
+
       setCurrentCourseAuthorList((prevState) => courseAuthorsList);
 
       formValues.title.value = currentCourseInfo.title;
@@ -121,18 +140,6 @@ export const CourseForm = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, getCourseList, getAuthorList]);
-
-  useEffect(() => {
-    if (firstRender && currentCourseAuthorList && getAuthorList) {
-      const newAuthorsList = getAuthorList?.filter((author) => {
-        return !currentCourseAuthorList.some(
-          (courseItem) => courseItem.id === author.id
-        );
-      });
-      setCurrentAuthorList(newAuthorsList);
-      setFirstRender(false);
-    }
-  }, [getAuthorList, currentCourseAuthorList, firstRender]);
 
   function handleClickAddAuthor(event, author) {
     event.preventDefault();
@@ -289,18 +296,16 @@ export const CourseForm = () => {
 
             <div className={styles.authorsContainer}>
               <h3>Authors List</h3>
-              <span>
-                {currentAuthorList &&
-                  currentAuthorList.map((author) => (
-                    <AuthorItem
-                      key={author.id}
-                      author={author}
-                      handleAddClick={(event) =>
-                        handleClickAddAuthor(event, author)
-                      }
-                    />
-                  ))}
-              </span>
+              {currentAuthorList &&
+                currentAuthorList.map((author) => (
+                  <AuthorItem
+                    key={author.id}
+                    author={author}
+                    handleAddClick={(event) =>
+                      handleClickAddAuthor(event, author)
+                    }
+                  />
+                ))}
             </div>
           </div>
 
