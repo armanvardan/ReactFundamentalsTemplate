@@ -119,7 +119,7 @@ describe("Course Card", () => {
     useDispatch.mockReturnValue(dispatchMock);
 
     const store = mockStore({
-      userRole: "admin", // Ensure userRole is set to "admin"
+      userRole: "admin",
     });
 
     render(
